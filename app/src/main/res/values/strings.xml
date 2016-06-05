@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">BACulator</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="shots">Shots</string>
+    <string name="beer">Beer</string>
+    <string name="wine">Wine</string>
+
+    <string name="gender">Gender:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
+    <string name="weight">Weight</string>
+    <string-array name="unit_array">
+        <item>pounds</item>
+        <item>kilograms</item>
+    </string-array>
+
+    <string name="water">Water (12oz)</string>
+    <string name="time">Time Drinking (hrs)</string>
+
+    <string-array name="qty">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+
+    </string-array>
+
+    <string name="lorem">Lorem ipsum dolor sit amet, te dicant vivendo definitiones per. Sale porro ei est, magna dolorum antiopam id sit, habeo perpetua in nam. Ea eius harum adolescens eos, sit ne alii modo vivendum. Ius duis delenit et. Eros ocurreret mea ei.
+
+Eos no labore dolorem accusamus, quem phaedrum vix et. Eu electram torquatos necessitatibus per, te has omnesque dignissim. Sadipscing signiferumque eum ea. An ludus hendrerit est, cu est malorum voluptua, ei propriae fabellas eos. Ne mea rebum suavitate constituam, ludus congue vix id, sumo audire impedit ea cum. In sit eros scripta expetenda, vim vero dolore integre eu. Ad eos oportere senserit temporibus, hinc comprehensam te cum.
+
+Ne ius esse vitae, vis id brute suscipit appetere, mei at impedit deterruisset consectetuer. Vim ludus dolores apeirian ne. Ex error eloquentiam quo, per ad impedit fabellas, facete eripuit assueverit no sed. Nonumy consequuntur an per. Putent percipit mel ne, pro ut deserunt consequat. Tacimates elaboraret eum id, quo etiam nullam ceteros in, ex definiebas elaboraret has.
+
+Vel at possim forensibus. Ex partem vituperatoribus pri, vocibus dolores platonem eos ne. Quo ad errem causae pertinacia, has in utroque mentitum constituam. His an stet cetero, vim ex vide minim facilisi. Facilisis gubergren eum ne, possit petentium pri ad. Electram abhorreant nec at, suscipit vivendum legendos id pro. Fastidii imperdiet has ea.
+
+Quo rebum phaedrum no, sit mazim expetendis ne, ei enim denique invenire vim. Cu tation splendide sed, nam et eros minim. Mei natum mandamus scribentur cu. Ut habeo molestiae sea, mei ad convenire assentior, in mea simul dicam fabellas. Ornatus inermis disputationi pri at.</string>
+</resources>

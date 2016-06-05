@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:weightSum="2">
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/beer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_fab_beer"
+        android:layout_weight=".25"
+        android:elevation="0dp"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/qty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/qty"
+        android:inputType="number"
+        android:gravity="center_vertical"
+        android:layout_weight=".25"/>
+
+    <TextView
+        android:id="@+id/drink"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/title"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+
+        android:gravity="center_vertical"
+        android:layout_weight="1.25"/>
+
+    <TextView
+        android:id="@+id/alc_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/year"
+        android:gravity="center_vertical"
+        android:layout_weight=".25"/>
+
+</LinearLayout>
