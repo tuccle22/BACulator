@@ -12,40 +12,52 @@
     android:orientation="horizontal"
     android:weightSum="2">
 
-    <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/beer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_fab_beer"
-        android:layout_weight=".25"
-        android:elevation="0dp"
-        android:visibility="gone"/>
-
-    <EditText
-        android:id="@+id/qty"
+    <ImageView
+        android:id="@+id/ic_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:entries="@array/qty"
-        android:inputType="number"
-        android:gravity="center_vertical"
-        android:layout_weight=".25"/>
+        android:layout_height="fill_parent"
+        android:tint="#55ff0000"
+        android:layout_weight=".3" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="bottom"
+        android:layout_weight=".35">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/qty"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:inputType="number"
+            android:hint="@string/qty_label" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/drink"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:textColor="@color/title"
         android:textAppearance="?android:attr/textAppearanceListItem"
+        android:gravity="center"
+        android:layout_weight="1" />
 
-        android:gravity="center_vertical"
-        android:layout_weight="1.25"/>
-
-    <TextView
-        android:id="@+id/alc_content"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/year"
-        android:gravity="center_vertical"
-        android:layout_weight=".25"/>
+        android:layout_height="fill_parent"
+        android:layout_gravity="bottom"
+        android:layout_weight=".35">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/alc_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:inputType="number"
+            android:hint="@string/bav_label" />
+
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>
