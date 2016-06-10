@@ -16,7 +16,7 @@ public class BACalc {
     private final double ml = 0.0338140225589;
     private final double gram = 453.592;
 
-    private double getBAC (double oz, double abv, double weight, String weightUnit, String gender, double hours){
+    public double getBAC (double oz, double abv, double weight, String weightUnit, String gender, double hours){
 
         double genderVal = male;
 

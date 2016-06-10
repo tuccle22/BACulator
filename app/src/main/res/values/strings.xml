@@ -36,6 +36,6 @@
     <string name="qty_label">QTY</string>
     <string name="bav_label">ABV %</string>
 
-    <string name="bac_result"> Your Blood Alcohol Content:</string>
+    <string name="bac_result">Calculate BAC:</string>
 
 </resources>

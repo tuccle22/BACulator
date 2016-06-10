@@ -1,6 +1,7 @@
 package com.example.macmini.baculator;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import com.github.clans.fab.FloatingActionButton;
@@ -22,10 +28,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private FloatingActionMenu mMenu;
     private FloatingActionButton mBeer;
     private FloatingActionButton mShots;
     private FloatingActionButton mWine;
+    private Button calc;
+    private TextView result;
 
     private List<Drinks> drinkList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -44,17 +53,16 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new DrinkAdapter(drinkList);
 
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
-        mBeer = (FloatingActionButton) findViewById(R.id.beer);
-        mShots = (FloatingActionButton) findViewById(R.id.shots);
-        mWine = (FloatingActionButton) findViewById(R.id.wine);
+        result = (TextView) findViewById(R.id.result);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-
         //Shots FAB
+        mShots = (FloatingActionButton) findViewById(R.id.shots);
         mShots.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -67,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Wine FAB
+        mWine = (FloatingActionButton) findViewById(R.id.wine);
         mWine.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Beer FAB
+        mBeer = (FloatingActionButton) findViewById(R.id.beer);
         mBeer.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -89,6 +99,15 @@ public class MainActivity extends AppCompatActivity {
                 mMenu.close(true);
             }
         });
+
+        calc = (Button) findViewById(R.id.calculate);
+        calc.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                result.setText(calculateBAC(v));
+            }
+        });
+
 
     }
     @Override
@@ -110,6 +129,31 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String calculateBAC(View v) {
+
+        TextInputEditText weight = (TextInputEditText) v.findViewById(R.id.weight);
+        Spinner weightUnit = (Spinner) v.findViewById(R.id.weight_unit);
+        RadioGroup gender = (RadioGroup) v.findViewById(R.id.gender);
+        TextInputEditText time = (TextInputEditText) v.findViewById(R.id.time);
+
+        BACalc calc = new BACalc();
+
+        double bac = 0;
+
+        for(int i=0 ; i<drinkList.size()-1 ; i++){
+            Drinks drinks = drinkList.get(i);
+            bac += drinks.getmQty() * calc.getBAC(
+                    12,
+                    drinks.getmAlc_content(),
+                    Double.parseDouble(weight.getText().toString()),
+                    weightUnit.getSelectedItem().toString(),
+                    ((RadioButton)v.findViewById(gender.getCheckedRadioButtonId())).getText().toString(),
+                    Double.parseDouble(time.getText().toString())
+            );
+        }
+        return String.valueOf(bac);
     }
 
 }
