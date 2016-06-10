@@ -11,18 +11,18 @@ public class Drinks {
     private String mDrink;
     private int mQty;
     private double mAlc_content;
-    private View mImg_view;
+//    private View mImg_view;
     private Drawable mImg;
 
 
     public Drinks(){ }
 
-    public Drinks(String mDrink, int mQty, double mAlc_content, View mImg_view, Drawable mImg){
+    public Drinks(String mDrink, int mQty, double mAlc_content, Drawable mImg){
 
         this.mDrink = mDrink;
         this.mQty = mQty;
         this.mAlc_content = mAlc_content;
-        this.mImg_view = mImg_view;
+//        this.mImg_view = mImg_view;
         this.mImg = mImg;
 
     }
@@ -52,13 +52,13 @@ public class Drinks {
     }
 
 
-    public View getmImg_view() {
-        return mImg_view;
-    }
-
-    public void setmImg_view(View mImg_view) {
-        this.mImg_view = mImg_view;
-    }
+//    public View getmImg_view() {
+//        return mImg_view;
+//    }
+//
+//    public void setmImg_view(View mImg_view) {
+//        this.mImg_view = mImg_view;
+//    }
 
     public Drawable getmImg() {
         return mImg;

@@ -1,29 +1,17 @@
 package com.example.macmini.baculator;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.ChangeBounds;
-import android.transition.Fade;
-import android.transition.Scene;
 import android.transition.TransitionInflater;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
+
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -65,17 +53,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        final ViewGroup container = (ViewGroup)findViewById(R.id.container);
-        final TransitionInflater transitionInflater = TransitionInflater.from(this);
-
-
 
         //Shots FAB
         mShots.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Drinks drinks = new Drinks("Shot of Liquor", 1, 40,
-                        findViewById(R.id.ic_view), getResources().getDrawable(R.drawable.ic_fab_shots, getTheme()));
+                        getResources().getDrawable(R.drawable.ic_fab_shots, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -87,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Drinks drinks = new Drinks("Glass of Wine", 1, 15,
-                        findViewById(R.id.ic_view), getResources().getDrawable(R.drawable.ic_fab_wine, getTheme()));
+                        getResources().getDrawable(R.drawable.ic_fab_wine, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -99,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Drinks drinks = new Drinks("12oz of Beer", 1, 5,
-                        findViewById(R.id.ic_view), getResources().getDrawable(R.drawable.ic_fab_beer, getTheme()));
+                        getResources().getDrawable(R.drawable.ic_fab_beer, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
