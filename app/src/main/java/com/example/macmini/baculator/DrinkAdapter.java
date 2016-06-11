@@ -60,6 +60,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         holder.alc_content.setText(String.valueOf(drinks.getmAlc_content()));
         holder.ic_view.setImageDrawable(drinks.getmImg());
 
+        
     }
 
     @Override

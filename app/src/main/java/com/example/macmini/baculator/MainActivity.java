@@ -100,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //calculate button
         calc = (Button) findViewById(R.id.calculate);
         calc.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                result.setText(calculateBAC(v));
+                result.setText(calculateBAC());
             }
         });
 
@@ -131,25 +132,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private String calculateBAC(View v) {
+    private String calculateBAC() {
 
-        TextInputEditText weight = (TextInputEditText) v.findViewById(R.id.weight);
-        Spinner weightUnit = (Spinner) v.findViewById(R.id.weight_unit);
-        RadioGroup gender = (RadioGroup) v.findViewById(R.id.gender);
-        TextInputEditText time = (TextInputEditText) v.findViewById(R.id.time);
+
 
         BACalc calc = new BACalc();
 
         double bac = 0;
 
-        for(int i=0 ; i<drinkList.size()-1 ; i++){
+        for(int i=0 ; i<drinkList.size() ; i++){
             Drinks drinks = drinkList.get(i);
+
+
+            TextInputEditText weight = (TextInputEditText) findViewById(R.id.weight);
+            Spinner weightUnit = (Spinner) findViewById(R.id.weight_unit);
+            RadioGroup gender = (RadioGroup) findViewById(R.id.gender);
+            TextInputEditText time = (TextInputEditText) findViewById(R.id.time);
+
             bac += drinks.getmQty() * calc.getBAC(
                     12,
                     drinks.getmAlc_content(),
                     Double.parseDouble(weight.getText().toString()),
                     weightUnit.getSelectedItem().toString(),
-                    ((RadioButton)v.findViewById(gender.getCheckedRadioButtonId())).getText().toString(),
+                    ((RadioButton)findViewById(gender.getCheckedRadioButtonId())).getText().toString(),
                     Double.parseDouble(time.getText().toString())
             );
         }
