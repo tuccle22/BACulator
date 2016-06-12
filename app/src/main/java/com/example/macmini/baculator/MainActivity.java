@@ -7,11 +7,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mWine;
     private Button calc;
     private TextView result;
+    private TextInputEditText mWeight;
+    private RadioGroup mGender;
+    private Spinner mWeightUnit;
+    private TextInputEditText mTime;
+
 
     private List<Drinks> drinkList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -54,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
         result = (TextView) findViewById(R.id.result);
+        mWeight = (TextInputEditText) findViewById(R.id.weight);
+        mGender = (RadioGroup) findViewById(R.id.gender);
+        mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
+        mTime = (TextInputEditText) findViewById(R.id.time);
+
 
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -105,9 +113,15 @@ public class MainActivity extends AppCompatActivity {
         calc.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                result.setText(calculateBAC());
+                try {
+                    result.setText(calculateBAC());
+                } catch (Exception e) {
+                    result.setText("Fill out the above information.");
+                    e.printStackTrace();
+                }
             }
         });
+
 
 
     }
@@ -132,33 +146,26 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private String calculateBAC() {
-
-
+    private String calculateBAC() throws Exception {
 
         BACalc calc = new BACalc();
-
         double bac = 0;
 
         for(int i=0 ; i<drinkList.size() ; i++){
             Drinks drinks = drinkList.get(i);
 
+                bac += drinks.getmQty() *
+                        calc.getBAC(
+                            12,
+                            drinks.getmAlc_content(),
+                            Double.parseDouble(mWeight.getText().toString()),
+                            mWeightUnit.getSelectedItem().toString(),
+                            ((RadioButton)findViewById(mGender.getCheckedRadioButtonId())).getText().toString(),
+                            Double.parseDouble(mTime.getText().toString())
+                        );
 
-            TextInputEditText weight = (TextInputEditText) findViewById(R.id.weight);
-            Spinner weightUnit = (Spinner) findViewById(R.id.weight_unit);
-            RadioGroup gender = (RadioGroup) findViewById(R.id.gender);
-            TextInputEditText time = (TextInputEditText) findViewById(R.id.time);
-
-            bac += drinks.getmQty() * calc.getBAC(
-                    12,
-                    drinks.getmAlc_content(),
-                    Double.parseDouble(weight.getText().toString()),
-                    weightUnit.getSelectedItem().toString(),
-                    ((RadioButton)findViewById(gender.getCheckedRadioButtonId())).getText().toString(),
-                    Double.parseDouble(time.getText().toString())
-            );
         }
-        return String.valueOf(bac);
+        return String.valueOf((double)Math.round(bac * 100d) / 100d);
     }
 
 }
