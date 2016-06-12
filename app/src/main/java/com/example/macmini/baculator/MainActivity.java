@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Drinks drinks = new Drinks("12oz of Beer", 1, 5,
-                        getResources().getDrawable(R.drawable.ic_fab_beer, getTheme()));
+                        getResources().getDrawable(R.drawable.ic_beer, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
