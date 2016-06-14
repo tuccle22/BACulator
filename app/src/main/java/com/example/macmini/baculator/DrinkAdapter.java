@@ -4,9 +4,8 @@ package com.example.macmini.baculator;
  * Created by MacMini on 6/3/16.
  */
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder> {
 
 
-    public List<Drinks> drinkList;
+    public ArrayList<Drinks> drinkList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView drink;
@@ -37,7 +37,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         }
     }
 
-    public DrinkAdapter(List<Drinks> drinkList) {
+    public DrinkAdapter(ArrayList<Drinks> drinkList) {
         this.drinkList = drinkList;
     }
 
@@ -56,6 +56,14 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         holder.qty.setText(String.valueOf(drinks.getmQty()));
         holder.alc_content.setText(String.valueOf(drinks.getmAlc_content()));
         holder.ic_view.setImageDrawable(drinks.getmImg());
+
+//        holder.qty.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//                AlertDialog alertDialog = new AlertDialog.Builder();
+//            }
+//        });
+
 
     }
 

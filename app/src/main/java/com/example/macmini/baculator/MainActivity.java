@@ -1,5 +1,10 @@
 package com.example.macmini.baculator;
 
+import android.app.ActionBar;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -7,21 +12,27 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText mTime;
 
 
-    private List<Drinks> drinkList = new ArrayList<>();
+    private ArrayList<Drinks> drinkList = new ArrayList<>();
     private RecyclerView recyclerView;
     private DrinkAdapter mAdapter;
 
@@ -49,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (savedInstanceState != null){
+            //populate saved instances
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -63,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         mTime = (TextInputEditText) findViewById(R.id.time);
 
 
-
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -74,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         mShots.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Drinks drinks = new Drinks("Shot of Liquor", 1, 40,
-                        getResources().getDrawable(R.drawable.ic_fab_shots, getTheme()));
+                Drinks drinks = new Drinks("Shot of Liquor", 1, 1.5, 40,
+                        getResources().getDrawable(R.drawable.ic_shots_fab, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -87,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         mWine.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Drinks drinks = new Drinks("Glass of Wine", 1, 15,
-                        getResources().getDrawable(R.drawable.ic_fab_wine, getTheme()));
+                Drinks drinks = new Drinks("Glass of Wine", 1, 6, 12,
+                        getResources().getDrawable(R.drawable.ic_wine_fab, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -100,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
         mBeer.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Drinks drinks = new Drinks("12oz of Beer", 1, 5,
-                        getResources().getDrawable(R.drawable.ic_beer, getTheme()));
+                Drinks drinks = new Drinks("12oz of Beer", 1, 12, 5,
+                        getResources().getDrawable(R.drawable.ic_beer_fab, getTheme()));
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -116,15 +130,61 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     result.setText(calculateBAC());
                 } catch (Exception e) {
-                    result.setText("Fill out the above information.");
+                    result.setText("Missing Information");
                     e.printStackTrace();
                 }
             }
         });
 
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Drinks drinks = drinkList.get(position);
+                Toast.makeText(getApplicationContext(), drinks.getmDrink() + " is selected!", Toast.LENGTH_SHORT).show();
 
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.list_item);
+                dialog.setTitle(drinks.getmDrink());
+
+                ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
+                img.setImageDrawable(drinks.getmImg());
+                TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
+                qty.setText(Integer.toString(drinks.getmQty()));
+                TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
+                drinkDesc.setText(drinks.getmDrink());
+                TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
+                abv.setText(Double.toString(drinks.getmAlc_content()));
+
+                dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                    }
+                });
+
+                dialog.show();
+
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        savedInstanceState.putParcelable("DrinkArray", drinkList);
+//        super.onSaveInstanceState(savedInstanceState);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -137,6 +197,13 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.action_about:
+                return true;
+            case R.id.action_settings:
+                startActivityForResult(new Intent(this, SettingsActivity.class), 0);
+                return true;
+        }
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -156,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
                 bac += drinks.getmQty() *
                         calc.getBAC(
-                            12,
+                            drinks.getmOz(),
                             drinks.getmAlc_content(),
                             Double.parseDouble(mWeight.getText().toString()),
                             mWeightUnit.getSelectedItem().toString(),
@@ -167,5 +234,50 @@ public class MainActivity extends AppCompatActivity {
         }
         return String.valueOf((double)Math.round(bac * 100d) / 100d);
     }
+
+    public interface ClickListener {
+        void onClick(View view, int position);
+        void onLongClick(View view, int position);
+    }
+        public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+            private GestureDetector gestureDetector;
+            private MainActivity.ClickListener clickListener;
+
+            public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MainActivity.ClickListener clickListener) {
+                this.clickListener = clickListener;
+                gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onLongPress(MotionEvent e) {
+                        View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                        if (child != null && clickListener != null) {
+                            clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                        }
+                    }
+                });
+            }
+            @Override
+            public boolean onInterceptTouchEvent (RecyclerView rv, MotionEvent e) {
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                    clickListener.onClick(child, rv.getChildPosition(child));
+                }
+                return false;
+            }
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e){  }
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {  }
+
+        }
+
+
+
+
 
 }
