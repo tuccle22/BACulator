@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //calculate button
-        calc = (Button) findViewById(R.id.calculate);
+        calc = (Button) findViewById(R.id.result);
         calc.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

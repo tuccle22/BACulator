@@ -38,7 +38,7 @@
     <string name="bav_label">ABV %</string>
     <string name="oz_label">OZ</string>
 
-    <string name="bac_result">BAC:</string>
+    <string name="bac_result">Calculate</string>
 
     <string name="icon_attributions">Created by Adrijan Karavdic from Noun Project</string>
     <string name="title_activity_settings">Settings</string>

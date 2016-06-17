@@ -13,7 +13,6 @@
     android:orientation="horizontal"
     android:weightSum="3.5">
 
-    
     <ImageView
         android:id="@+id/ic_view"
         android:layout_width="0dp"
