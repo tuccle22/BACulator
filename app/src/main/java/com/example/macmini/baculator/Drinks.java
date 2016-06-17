@@ -17,14 +17,13 @@ public class Drinks {
 
     public Drinks(){ }
 
-    public Drinks(String mDrink, int mQty, double mOz, double mAlc_content, Drawable mImg){
+    public Drinks(Drawable mImg, int mQty, double mOz, String mDrink, double mAlc_content){
 
-        this.mDrink = mDrink;
+        this.mImg = mImg;
         this.mQty = mQty;
+        this.mDrink = mDrink;
         this.mOz = mOz;
         this.mAlc_content = mAlc_content;
-        this.mImg = mImg;
-
     }
 
     public String getmDrink() {

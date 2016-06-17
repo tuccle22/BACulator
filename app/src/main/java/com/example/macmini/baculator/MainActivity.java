@@ -30,8 +30,6 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 
@@ -88,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         mShots.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Drinks drinks = new Drinks("Shot of Liquor", 1, 1.5, 40,
-                        getResources().getDrawable(R.drawable.ic_shots_fab, getTheme()));
+                Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_shots_fab, getTheme()),
+                        1, 1.5, "Shot of Liquor", 40);
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -101,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         mWine.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Drinks drinks = new Drinks("Glass of Wine", 1, 6, 12,
-                        getResources().getDrawable(R.drawable.ic_wine_fab, getTheme()));
+                Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_wine_fab, getTheme()),
+                        1, 6, "Glass of Wine", 12);
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -114,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         mBeer.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Drinks drinks = new Drinks("12oz of Beer", 1, 12, 5,
-                        getResources().getDrawable(R.drawable.ic_beer_fab, getTheme()));
+                Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_beer_fab, getTheme()),
+                        1, 12, "12oz of Beer", 5);
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -140,35 +138,45 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 Drinks drinks = drinkList.get(position);
-                Toast.makeText(getApplicationContext(), drinks.getmDrink() + " is selected!", Toast.LENGTH_SHORT).show();
+                final int pos = position;
 
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.setContentView(R.layout.list_item);
                 dialog.setTitle(drinks.getmDrink());
 
-                ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
-                img.setImageDrawable(drinks.getmImg());
-                TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
-                qty.setText(Integer.toString(drinks.getmQty()));
-                TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
-                drinkDesc.setText(drinks.getmDrink());
-                TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
-                abv.setText(Double.toString(drinks.getmAlc_content()));
+                try {
+                    final ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
+                    img.setImageDrawable(drinks.getmImg());
+                    final TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
+                    qty.setText(Integer.toString(drinks.getmQty()));
+                    qty.setSelectAllOnFocus(true);
+                    final TextInputEditText oz = (TextInputEditText) dialog.findViewById(R.id.oz);
+                    oz.setText(Double.toString(drinks.getmOz()));
+                    oz.setSelectAllOnFocus(true);
+                    final TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
+                    drinkDesc.setText(drinks.getmDrink());
+                    final TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
+                    abv.setText(Double.toString(drinks.getmAlc_content()));
+                    abv.setSelectAllOnFocus(true);
 
-                dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
-                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-
-                    }
-                });
-
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            Drinks drinks = drinkList.get(pos);
+                            drinks.setmQty(Integer.parseInt(qty.getText().toString()));
+                            drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
+                            drinks.setmOz(Double.parseDouble(oz.getText().toString()));
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 dialog.show();
-
-
-
             }
 
             @Override
@@ -177,6 +185,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
@@ -275,9 +289,6 @@ public class MainActivity extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {  }
 
         }
-
-
-
 
 
 }

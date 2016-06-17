@@ -23,7 +23,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView drink;
-        public TextInputEditText qty, alc_content;
+        public TextInputEditText qty, alc_content, oz;
         public ImageView ic_view;
 
 
@@ -31,8 +31,10 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
             super(view);
             drink = (TextView) view.findViewById(R.id.drink);
             qty = (TextInputEditText) view.findViewById(R.id.qty);
-            alc_content = (TextInputEditText) view.findViewById(R.id.alc_content);
+            oz = (TextInputEditText) view.findViewById(R.id.oz);
             ic_view = (ImageView) view.findViewById(R.id.ic_view);
+            alc_content = (TextInputEditText) view.findViewById(R.id.alc_content);
+
 
         }
     }
@@ -54,8 +56,10 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         Drinks drinks = drinkList.get(position);
         holder.drink.setText(drinks.getmDrink());
         holder.qty.setText(String.valueOf(drinks.getmQty()));
-        holder.alc_content.setText(String.valueOf(drinks.getmAlc_content()));
+        holder.oz.setText(String.valueOf(drinks.getmOz()));
         holder.ic_view.setImageDrawable(drinks.getmImg());
+        holder.alc_content.setText(String.valueOf(drinks.getmAlc_content()));
+
 
 //        holder.qty.setOnClickListener(new View.OnClickListener(){
 //            @Override
