@@ -38,6 +38,9 @@
     <string name="bav_label">ABV %</string>
     <string name="oz_label">OZ</string>
 
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+
     <string name="bac_result">Calculate</string>
 
     <string name="icon_attributions">Created by Adrijan Karavdic from Noun Project</string>

@@ -40,7 +40,7 @@
                     android:layout_gravity="center"
                     android:textAppearance="?android:attr/textAppearance"
                     android:paddingRight="8dp"
-                    android:text="@string/gender"/>
+                    android:text="@string/gender" />
 
                 <RadioGroup
                     android:id="@+id/gender"
@@ -48,19 +48,22 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="8dp">
+                    android:paddingLeft="8dp"
+                    android:freezesText="true">
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/male"
-                        android:textAppearance="?android:attr/textAppearance" />
+                        android:textAppearance="?android:attr/textAppearance"
+                        android:freezesText="true" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/female"
-                        android:textAppearance="?android:attr/textAppearance" />
+                        android:textAppearance="?android:attr/textAppearance"
+                        android:freezesText="true" />
                 </RadioGroup>
 
             </LinearLayout>
@@ -84,7 +87,8 @@
                         android:paddingRight="8dp"
                         android:inputType="numberDecimal"
                         android:textAppearance="?android:attr/textAppearance"
-                        android:hint="@string/weight" />
+                        android:hint="@string/weight"
+                        android:freezesText="true"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -94,7 +98,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:entries="@array/unit_array"
-                    android:textAppearance="?android:attr/textAppearance" />
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:freezesText="true"/>
 
             </LinearLayout>
 
@@ -118,7 +123,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:textAppearance="?android:attr/textAppearance"
-                        android:hint="@string/water"/>
+                        android:hint="@string/water"
+                        android:freezesText="true"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -134,7 +140,8 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearance"
                         android:inputType="numberDecimal"
-                        android:hint="@string/time" />
+                        android:hint="@string/time"
+                        android:freezesText="true"/>
 
             </android.support.design.widget.TextInputLayout>
             </LinearLayout>

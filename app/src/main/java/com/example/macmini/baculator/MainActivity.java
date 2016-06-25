@@ -25,8 +25,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -35,6 +33,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final String GENDER = "gender";
+    static final String WEIGHT = "weight";
+    static final String WEIGHT_UNIT = "weightUnit";
+    static final String WATER = "water";
+    static final String TIME_DRINKING = "timeDrinking";
 
     private FloatingActionMenu mMenu;
     private FloatingActionButton mBeer;
@@ -45,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText mWeight;
     private RadioGroup mGender;
     private Spinner mWeightUnit;
+    private TextInputEditText mWater;
     private TextInputEditText mTime;
-
 
     private ArrayList<Drinks> drinkList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mWeight = (TextInputEditText) findViewById(R.id.weight);
         mGender = (RadioGroup) findViewById(R.id.gender);
         mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
+        mWater = (TextInputEditText) findViewById(R.id.water);
         mTime = (TextInputEditText) findViewById(R.id.time);
 
 
@@ -80,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        mMenu.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            }
+        });
 
         //Shots FAB
         mShots = (FloatingActionButton) findViewById(R.id.shots);
@@ -159,6 +170,13 @@ public class MainActivity extends AppCompatActivity {
                     abv.setText(Double.toString(drinks.getmAlc_content()));
                     abv.setSelectAllOnFocus(true);
 
+//                    View v = ;
+//
+//                    dialog.addContentView(v, new RecyclerView.LayoutParams(
+//                            ViewGroup.LayoutParams.MATCH_PARENT,
+//                            ViewGroup.LayoutParams.MATCH_PARENT
+//                    ));
+
                     dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
                     dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -195,8 +213,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+//        savedInstanceState.putInt(GENDER, mGender.getCheckedRadioButtonId());
+//        savedInstanceState.putDouble(WEIGHT, Double.parseDouble(mWeight.getText().toString()));
+//        savedInstanceState.putInt(WEIGHT_UNIT, mWeightUnit.getSelectedItemPosition());
+//        savedInstanceState.putDouble(WATER, Double.parseDouble(mWater.getText().toString()));
+//        savedInstanceState.putDouble(TIME_DRINKING, Double.parseDouble(mTime.getText().toString()));
 //        savedInstanceState.putParcelable("DrinkArray", drinkList);
-//        super.onSaveInstanceState(savedInstanceState);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
