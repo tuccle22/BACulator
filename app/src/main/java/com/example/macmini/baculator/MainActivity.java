@@ -33,12 +33,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final String GENDER = "gender";
-    static final String WEIGHT = "weight";
-    static final String WEIGHT_UNIT = "weightUnit";
-    static final String WATER = "water";
-    static final String TIME_DRINKING = "timeDrinking";
-
     private FloatingActionMenu mMenu;
     private FloatingActionButton mBeer;
     private FloatingActionButton mShots;
@@ -55,16 +49,22 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DrinkAdapter mAdapter;
 
+    static final String DRINK_LIST = "drinkList";
+    static final String GENDER = "gender";
+
+    private int genderSelection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            drinkList = savedInstanceState.getParcelableArrayList(DRINK_LIST);
+            //genderSelection = savedInstanceState.getInt(GENDER);
+        }
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (savedInstanceState != null){
-            //populate saved instances
-        }
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -72,13 +72,15 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new DrinkAdapter(drinkList);
 
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
-        result = (TextView) findViewById(R.id.result);
+
         mWeight = (TextInputEditText) findViewById(R.id.weight);
         mGender = (RadioGroup) findViewById(R.id.gender);
         mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
         mWater = (TextInputEditText) findViewById(R.id.water);
         mTime = (TextInputEditText) findViewById(R.id.time);
 
+
+        mGender.check(genderSelection);
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -170,13 +172,6 @@ public class MainActivity extends AppCompatActivity {
                     abv.setText(Double.toString(drinks.getmAlc_content()));
                     abv.setSelectAllOnFocus(true);
 
-//                    View v = ;
-//
-//                    dialog.addContentView(v, new RecyclerView.LayoutParams(
-//                            ViewGroup.LayoutParams.MATCH_PARENT,
-//                            ViewGroup.LayoutParams.MATCH_PARENT
-//                    ));
-
                     dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
                     dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -213,13 +208,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-//        savedInstanceState.putInt(GENDER, mGender.getCheckedRadioButtonId());
-//        savedInstanceState.putDouble(WEIGHT, Double.parseDouble(mWeight.getText().toString()));
-//        savedInstanceState.putInt(WEIGHT_UNIT, mWeightUnit.getSelectedItemPosition());
-//        savedInstanceState.putDouble(WATER, Double.parseDouble(mWater.getText().toString()));
-//        savedInstanceState.putDouble(TIME_DRINKING, Double.parseDouble(mTime.getText().toString()));
-//        savedInstanceState.putParcelable("DrinkArray", drinkList);
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList(DRINK_LIST, drinkList);
+        savedInstanceState.putInt(GENDER, mGender.getCheckedRadioButtonId());
     }
 
     @Override
@@ -231,9 +222,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_about:
                 return true;

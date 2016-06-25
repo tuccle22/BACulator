@@ -1,21 +1,20 @@
 package com.example.macmini.baculator;
 
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 
 /**
  * Created by MacMini on 6/3/16.
  */
-public class Drinks {
+public class Drinks implements Parcelable {
 
     private String mDrink;
     private int mQty;
     private double mAlc_content;
     private double mOz;
     private Drawable mImg;
-
-
-    public Drinks(){ }
 
     public Drinks(Drawable mImg, int mQty, double mOz, String mDrink, double mAlc_content){
 
@@ -64,5 +63,30 @@ public class Drinks {
 
     public void setmOz(double mOz) {
         this.mOz = mOz;
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+
+    //Implements parceable for screen rotation.  I'm not
+    //sure why we would use these methods.
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(mDrink);
+    }
+
+    public static final Parcelable.Creator<Drinks> CREATOR
+            = new Parcelable.Creator<Drinks>() {
+        public Drinks createFromParcel(Parcel in) {
+            return new Drinks(in);
+        }
+        public Drinks[] newArray(int size) {
+            return new Drinks[size];
+        }
+    };
+
+    private Drinks(Parcel in) {
+        mDrink = in.readString();
     }
 }
