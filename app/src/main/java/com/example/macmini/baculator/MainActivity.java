@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +21,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -48,16 +54,18 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Drinks> drinkList = new ArrayList<>();
     private RecyclerView recyclerView;
     private DrinkAdapter mAdapter;
+    private CardView mCard;
+    private LinearLayout mPerson;
 
     static final String DRINK_LIST = "drinkList";
     static final String GENDER = "gender";
 
-    private int genderSelection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             drinkList = savedInstanceState.getParcelableArrayList(DRINK_LIST);
             //genderSelection = savedInstanceState.getInt(GENDER);
         }
@@ -67,10 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new DrinkAdapter(drinkList);
 
+        mPerson = (LinearLayout) findViewById(R.id.person);
+        mCard = (CardView) findViewById(R.id.card);
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
 
         mWeight = (TextInputEditText) findViewById(R.id.weight);
@@ -80,14 +90,12 @@ public class MainActivity extends AppCompatActivity {
         mTime = (TextInputEditText) findViewById(R.id.time);
 
 
-        mGender.check(genderSelection);
-
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        mMenu.setOnClickListener(new View.OnClickListener(){
+        mMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -96,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Shots FAB
         mShots = (FloatingActionButton) findViewById(R.id.shots);
-        mShots.setOnClickListener(new View.OnClickListener(){
+        mShots.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_shots_fab, getTheme()),
                         1, 1.5, "Shot of Liquor", 40);
                 drinkList.add(drinks);
@@ -109,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Wine FAB
         mWine = (FloatingActionButton) findViewById(R.id.wine);
-        mWine.setOnClickListener(new View.OnClickListener(){
+        mWine.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_wine_fab, getTheme()),
                         1, 6, "Glass of Wine", 12);
                 drinkList.add(drinks);
@@ -122,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Beer FAB
         mBeer = (FloatingActionButton) findViewById(R.id.beer);
-        mBeer.setOnClickListener(new View.OnClickListener(){
+        mBeer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_beer_fab, getTheme()),
                         1, 12, "12oz of Beer", 5);
                 drinkList.add(drinks);
@@ -135,9 +143,9 @@ public class MainActivity extends AppCompatActivity {
 
         //calculate button
         calc = (Button) findViewById(R.id.result);
-        calc.setOnClickListener(new View.OnClickListener(){
+        calc.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 try {
                     result.setText(calculateBAC());
                 } catch (Exception e) {
@@ -198,6 +206,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
+        mPerson.setVisibility(View.GONE);
+        mCard.setVisibility(View.GONE);
+        mMenu.hideMenu(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMenu.showMenu(true);
+                mCard.setVisibility(View.VISIBLE);
+                mPerson.setVisibility(View.VISIBLE);
+
+                Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
+                mMenu.setAnimation(bottom);
+                mCard.setAnimation(bottom);
+                mPerson.setAnimation(bottom);
+            }
+        }, 300);
     }
 
     @Override

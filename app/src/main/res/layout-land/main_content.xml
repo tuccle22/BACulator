@@ -64,17 +64,6 @@
                         android:textAppearance="?android:attr/textAppearance"
                         android:freezesText="true" />
                 </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingRight="8dp"
-                android:paddingLeft="8dp"
-                android:gravity="center">
-
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="56dp"
                     android:layout_height="wrap_content">
@@ -99,6 +88,18 @@
                     android:entries="@array/unit_array"
                     android:textAppearance="?android:attr/textAppearance"
                     android:freezesText="true"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:gravity="center">
+
+
 
             </LinearLayout>
 
@@ -142,7 +143,7 @@
                         android:hint="@string/time"
                         android:freezesText="true"/>
 
-            </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
         </LinearLayout>
