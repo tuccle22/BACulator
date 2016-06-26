@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mShots;
     private FloatingActionButton mWine;
     private Button calc;
-    private TextView result;
+    private TextView mResult;
     private TextInputEditText mWeight;
     private RadioGroup mGender;
     private Spinner mWeightUnit;
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
         mWater = (TextInputEditText) findViewById(R.id.water);
         mTime = (TextInputEditText) findViewById(R.id.time);
-
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -147,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    result.setText(calculateBAC());
+                    calc.setText(calculateBAC());
                 } catch (Exception e) {
-                    result.setText("Missing Information");
+                    calc.setText("Missing Information");
                     e.printStackTrace();
                 }
             }

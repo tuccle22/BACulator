@@ -13,7 +13,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="232dip"
+        android:layout_height="232dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true">
 
@@ -25,7 +25,7 @@
             android:fitsSystemWindows="true"
             app:expandedTitleGravity="top|center_horizontal"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginStart="64dp"
             app:expandedTitleMarginEnd="64dp">
 
             <android.support.v7.widget.Toolbar
@@ -43,7 +43,7 @@
             android:id="@+id/nested_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="88dp"
+            android:paddingBottom="50dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:behavior_overlapTop="90dp">
 
