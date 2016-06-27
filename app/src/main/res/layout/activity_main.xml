@@ -61,7 +61,6 @@
         android:layout_marginBottom="0dp"
         android:layout_gravity="bottom"
         android:foreground="?android:attr/selectableItemBackground"
-        android:elevation="2dp"
         android:clickable="true">
 
             <Button

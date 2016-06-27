@@ -7,8 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private DrinkAdapter mAdapter;
     private CardView mCard;
     private LinearLayout mPerson;
+    private CollapsingToolbarLayout mCollapse;
 
     static final String DRINK_LIST = "drinkList";
     static final String GENDER = "gender";
@@ -74,14 +76,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new DrinkAdapter(drinkList);
 
         mPerson = (LinearLayout) findViewById(R.id.person);
         mCard = (CardView) findViewById(R.id.card);
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
+        mCollapse = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
 
         mWeight = (TextInputEditText) findViewById(R.id.weight);
         mGender = (RadioGroup) findViewById(R.id.gender);
@@ -94,12 +97,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        mMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            }
-        });
 
         //Shots FAB
         mShots = (FloatingActionButton) findViewById(R.id.shots);
@@ -207,20 +204,32 @@ public class MainActivity extends AppCompatActivity {
 
         mPerson.setVisibility(View.GONE);
         mCard.setVisibility(View.GONE);
-        mMenu.hideMenu(false);
+        mCollapse.setVisibility(View.GONE);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mMenu.showMenu(true);
                 mCard.setVisibility(View.VISIBLE);
                 mPerson.setVisibility(View.VISIBLE);
+                mCollapse.setVisibility(View.VISIBLE);
 
                 Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-                mMenu.setAnimation(bottom);
+                mCollapse.setAnimation(bottom);
                 mCard.setAnimation(bottom);
                 mPerson.setAnimation(bottom);
             }
         }, 300);
+
+        mMenu.hideMenu(false);
+        new Handler().postDelayed(new Runnable(){
+           @Override
+            public void run() {
+               mMenu.showMenu(true);
+
+               Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
+               mMenu.setAnimation(bottom);
+           }
+        }, 500);
     }
 
     @Override
