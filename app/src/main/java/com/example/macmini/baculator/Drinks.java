@@ -15,14 +15,16 @@ public class Drinks implements Parcelable {
     private double mAlc_content;
     private double mOz;
     private Drawable mImg;
+    private int mVisibility;
 
-    public Drinks(Drawable mImg, int mQty, double mOz, String mDrink, double mAlc_content){
+    public Drinks(Drawable mImg, int mQty, double mOz, String mDrink, double mAlc_content, int mVisibility){
 
         this.mImg = mImg;
         this.mQty = mQty;
         this.mDrink = mDrink;
         this.mOz = mOz;
         this.mAlc_content = mAlc_content;
+        this.mVisibility = mVisibility;
     }
 
     public String getmDrink() {
@@ -88,5 +90,13 @@ public class Drinks implements Parcelable {
 
     private Drinks(Parcel in) {
         mDrink = in.readString();
+    }
+
+    public int getmVisibility() {
+        return mVisibility;
+    }
+
+    public void setmVisibility(int mVisibility) {
+        this.mVisibility = mVisibility;
     }
 }

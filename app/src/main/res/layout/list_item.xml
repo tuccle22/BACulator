@@ -89,10 +89,22 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/removed_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/title"
+        android:text="Type of Drink Removed"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_weight="1" />
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="2px"
+        android:background="@android:color/darker_gray"
         />
+
 
 </LinearLayout>

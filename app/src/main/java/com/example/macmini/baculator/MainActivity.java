@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -15,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +25,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_shots_fab, getTheme()),
-                        1, 1.5, "Shot of Liquor", 40);
+                        1, 1.5, "Shot of Liquor", 40, View.GONE);
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_wine_fab, getTheme()),
-                        1, 6, "Glass of Wine", 12);
+                        1, 6, "Glass of Wine", 12, View.GONE);
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_beer_fab, getTheme()),
-                        1, 12, "12oz of Beer", 5);
+                        1, 12, "12oz of Beer", 5, View.GONE);
                 drinkList.add(drinks);
                 mAdapter.notifyItemInserted(mAdapter.getItemCount());
                 mMenu.close(true);
@@ -150,6 +151,43 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
+                return false;
+            }
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
+                drinkList.get(viewHolder.getAdapterPosition()).setmVisibility(View.VISIBLE);
+                final Drinks removedDrink = drinkList.get(viewHolder.getAdapterPosition());
+                final Snackbar snackbar = Snackbar
+                        .make(recyclerView, "DRINK REMOVED", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                drinkList.add(viewHolder.getAdapterPosition(), removedDrink);
+                                drinkList.get(viewHolder.getAdapterPosition()).setmVisibility(View.GONE);
+                                mAdapter.notifyItemInserted(viewHolder.getAdapterPosition());
+                            }
+                        });
+                snackbar.setCallback(new Snackbar.Callback() {
+                   @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                       drinkList.remove(viewHolder.getAdapterPosition());
+                       mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                   }
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+
+                    }
+                });
+                snackbar.show();
+            }
+        });
+        swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
@@ -202,34 +240,34 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
-        mPerson.setVisibility(View.GONE);
-        mCard.setVisibility(View.GONE);
-        mCollapse.setVisibility(View.GONE);
 
+        mCard.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mCard.setVisibility(View.VISIBLE);
-                mPerson.setVisibility(View.VISIBLE);
-                mCollapse.setVisibility(View.VISIBLE);
+//                mPerson.setVisibility(View.VISIBLE);
+//                mCollapse.setVisibility(View.VISIBLE);
 
                 Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-                mCollapse.setAnimation(bottom);
+//                mCollapse.setAnimation(bottom);
                 mCard.setAnimation(bottom);
-                mPerson.setAnimation(bottom);
+//                mPerson.setAnimation(bottom);
             }
-        }, 300);
+        }, 0);
 
         mMenu.hideMenu(false);
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
            @Override
             public void run() {
                mMenu.showMenu(true);
 
+               Animation shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show);
                Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-               mMenu.setAnimation(bottom);
+              // mMenu.setAnimation(bottom);
+               mMenu.setAnimation(shake);
            }
-        }, 500);
+        }, 800);
     }
 
     @Override

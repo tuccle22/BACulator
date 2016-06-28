@@ -25,6 +25,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         public TextView drink;
         public TextInputEditText qty, alc_content, oz;
         public ImageView ic_view;
+        public TextView removed_row;
 
 
         public MyViewHolder(View view) {
@@ -34,7 +35,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
             oz = (TextInputEditText) view.findViewById(R.id.oz);
             ic_view = (ImageView) view.findViewById(R.id.ic_view);
             alc_content = (TextInputEditText) view.findViewById(R.id.alc_content);
-
+            removed_row = (TextView) view.findViewById(R.id.removed_row);
 
         }
     }
@@ -60,6 +61,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         holder.ic_view.setImageDrawable(drinks.getmImg());
         holder.alc_content.setText(String.valueOf(drinks.getmAlc_content()));
 
+        holder.removed_row.setText(drinks.getmDrink());
 
 //        holder.qty.setOnClickListener(new View.OnClickListener(){
 //            @Override
