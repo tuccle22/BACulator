@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private CardView mCard;
     private LinearLayout mPerson;
     private CollapsingToolbarLayout mCollapse;
+    private CoordinatorLayout mContainer;
 
     static final String DRINK_LIST = "drinkList";
     static final String GENDER = "gender";
@@ -76,30 +77,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new DrinkAdapter(drinkList);
-
+        // --> Layouts Initialized Here <-- //
         mPerson = (LinearLayout) findViewById(R.id.person);
         mCard = (CardView) findViewById(R.id.card);
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
         mCollapse = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
 
+        // --> Layouts Initialized Here <-- //
         mWeight = (TextInputEditText) findViewById(R.id.weight);
         mGender = (RadioGroup) findViewById(R.id.gender);
         mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
         mWater = (TextInputEditText) findViewById(R.id.water);
         mTime = (TextInputEditText) findViewById(R.id.time);
 
+        // --> RecyclerView Stuff Here <-- //
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mAdapter = new DrinkAdapter(drinkList);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-
-        //Shots FAB
+        // Shots FAB
         mShots = (FloatingActionButton) findViewById(R.id.shots);
         mShots.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Wine FAB
+        // Wine FAB
         mWine = (FloatingActionButton) findViewById(R.id.wine);
         mWine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Beer FAB
+        // Beer FAB
         mBeer = (FloatingActionButton) findViewById(R.id.beer);
         mBeer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //calculate button
+        // calculate button
         calc = (Button) findViewById(R.id.result);
         calc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // --> Swipe to Dismiss Drink Items <-- //
         ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
