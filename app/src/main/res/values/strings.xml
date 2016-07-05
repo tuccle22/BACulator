@@ -18,6 +18,12 @@
         <item>kilograms</item>
     </string-array>
 
+    <string-array name="gender_array">
+        <item>Select gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
     <string name="water">Water (12oz)</string>
     <string name="time">Time Drinking (hrs)</string>
 
@@ -38,10 +44,8 @@
     <string name="bav_label">ABV %</string>
     <string name="oz_label">OZ</string>
 
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
-
-    <string name="bac_result">Calculate</string>
+    <string name="calc">Calculate</string>
+    <string name="pull">Pull Up</string>
 
     <string name="icon_attributions">Created by Adrijan Karavdic from Noun Project</string>
     <string name="title_activity_settings">Settings</string>

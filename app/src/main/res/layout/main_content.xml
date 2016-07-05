@@ -13,10 +13,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:layout_marginBottom="8dp"
         android:paddingTop="32dp"
+        android:backgroundTint="@color/cardview_dark_background"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true">
 
@@ -87,6 +88,7 @@
                         android:paddingRight="8dp"
                         android:inputType="numberDecimal"
                         android:textAppearance="?android:attr/textAppearance"
+                        style="@android:style/TextAppearance.DeviceDefault.Widget.EditText"
                         android:hint="@string/weight"
                         android:freezesText="true"/>
 
@@ -149,13 +151,4 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
 </LinearLayout>

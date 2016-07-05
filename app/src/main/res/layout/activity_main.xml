@@ -13,7 +13,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="232dp"
+        android:layout_height="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true">
 
@@ -21,20 +21,30 @@
             android:id="@+id/main_collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             android:fitsSystemWindows="true"
-            app:expandedTitleGravity="top|center_horizontal"
-            app:contentScrim="?attr/colorPrimary"
->
+            app:expandedTitleGravity="center_horizontal|top"
+            app:contentScrim="?attr/colorPrimary">
 
             <ImageView
                 android:id="@+id/bgheader"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="232dp"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 android:background="@drawable/beer"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="parallax"
+                android:alpha="0.3"
+                app:layout_collapseParallaxMultiplier="0.9" />
+
+            <include
+                android:id="@+id/person_info"
+                layout="@layout/main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="150dp"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.85" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -47,22 +57,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/nested_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="50dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:behavior_overlapTop="90dp">
-
-            <include layout="@layout/main_content" />
-
-        </android.support.v4.widget.NestedScrollView>
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="47dp"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/card"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
@@ -72,13 +80,13 @@
         android:clickable="true">
 
             <Button
-                android:id="@+id/result"
+                android:id="@+id/calculate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="?android:attr/borderlessButtonStyle"
-                android:text="@string/bac_result"
-                android:gravity="center"
-                android:layout_weight="1"/>
+                android:backgroundTint="@color/cardview_dark_background"
+                android:text="set on run"
+                android:gravity="center" />
 
     </android.support.v7.widget.CardView>
 
@@ -90,7 +98,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
-        android:src="@android:drawable/ic_menu_add">
+        android:src="@android:drawable/ic_menu_add"
+        android:visibility="gone">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/shots"
@@ -99,7 +108,7 @@
             android:layout_gravity="bottom|end"
             app:fab_size="mini"
             app:fab_label="@string/shots"
-            android:src="@drawable/ic_shots_fab"/>
+            android:src="@drawable/ic_shots_fab" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/wine"
@@ -108,7 +117,7 @@
             android:layout_gravity="bottom|end"
             app:fab_size="mini"
             app:fab_label="@string/wine"
-            android:src="@drawable/ic_wine_fab"/>
+            android:src="@drawable/ic_wine_fab" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/beer"

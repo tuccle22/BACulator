@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,16 +41,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionMenu mMenu;
-    private FloatingActionButton mBeer;
-    private FloatingActionButton mShots;
-    private FloatingActionButton mWine;
-    private Button calc;
-    private TextView mResult;
+    private FloatingActionButton mBeer, mShots, mWine;
+    private TextView mCalculate;
     private TextInputEditText mWeight;
     private RadioGroup mGender;
     private Spinner mWeightUnit;
-    private TextInputEditText mWater;
-    private TextInputEditText mTime;
+    private TextInputEditText mWater, mTime;
 
     private ArrayList<Drinks> drinkList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -60,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mPerson;
     private CollapsingToolbarLayout mCollapse;
     private CoordinatorLayout mContainer;
+    private AppBarLayout mAppBarLayout;
 
     static final String DRINK_LIST = "drinkList";
     static final String GENDER = "gender";
@@ -77,13 +73,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // --> Layouts Initialized Here <-- //
+        mCollapse = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        mMenu = (FloatingActionMenu) findViewById(R.id.menu);
+        if (mMenu != null) {
+            mMenu.hideMenu(true);
+            mMenu.setMenuButtonShowAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
+            mMenu.setMenuButtonHideAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_to_bottom));
+        }
+        mCalculate = (Button) findViewById(R.id.calculate);
+
+        // --> Person Info Initialized Here <-- //
         mPerson = (LinearLayout) findViewById(R.id.person);
         mCard = (CardView) findViewById(R.id.card);
-        mMenu = (FloatingActionMenu) findViewById(R.id.menu);
-        mCollapse = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
-
-        // --> Layouts Initialized Here <-- //
         mWeight = (TextInputEditText) findViewById(R.id.weight);
         mGender = (RadioGroup) findViewById(R.id.gender);
         mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
@@ -137,14 +139,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // calculate button
-        calc = (Button) findViewById(R.id.result);
-        calc.setOnClickListener(new View.OnClickListener() {
+        mCalculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    calc.setText(calculateBAC());
+                    mCalculate.setText(calculateBAC());
                 } catch (Exception e) {
-                    calc.setText("Missing Information");
+                    mCalculate.setText("Missing Information");
                     e.printStackTrace();
                 }
             }
@@ -187,6 +188,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+                if (offset == 0) {
+                    mMenu.hideMenu(true);
+                    mCalculate.setText(getResources().getString(R.string.pull));
+                }
+                else {
+                    mMenu.showMenu(true);
+                    mCalculate.setText(getResources().getString(R.string.calc));
+                }
+            }
+        });
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
@@ -240,33 +255,33 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
-        mCard.setVisibility(View.GONE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mCard.setVisibility(View.VISIBLE);
-//                mPerson.setVisibility(View.VISIBLE);
-//                mCollapse.setVisibility(View.VISIBLE);
+//        mCard.setVisibility(View.GONE);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mCard.setVisibility(View.VISIBLE);
+////                mPerson.setVisibility(View.VISIBLE);
+////                mCollapse.setVisibility(View.VISIBLE);
+//
+//                Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
+////                mCollapse.setAnimation(bottom);
+//                mCard.setAnimation(bottom);
+////                mPerson.setAnimation(bottom);
+//            }
+//        }, 0);
 
-                Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-//                mCollapse.setAnimation(bottom);
-                mCard.setAnimation(bottom);
-//                mPerson.setAnimation(bottom);
-            }
-        }, 0);
-
-        mMenu.hideMenu(false);
-        new Handler().postDelayed(new Runnable() {
-           @Override
-            public void run() {
-               mMenu.showMenu(true);
-
-               Animation shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show);
-               Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-              // mMenu.setAnimation(bottom);
-               mMenu.setAnimation(shake);
-           }
-        }, 800);
+//        mMenu.hideMenu(false);
+//        new Handler().postDelayed(new Runnable() {
+//           @Override
+//            public void run() {
+//               mMenu.showMenu(true);
+//
+//               Animation shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.hide_to_bottom);
+//               Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
+//              // mMenu.setAnimation(bottom);
+//               mMenu.setAnimation(shake);
+//           }
+//        }, 800);
     }
 
     @Override
