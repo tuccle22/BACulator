@@ -1,10 +1,10 @@
 package com.example.macmini.baculator;
 
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity{
@@ -69,6 +69,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity{
             addPreferencesFromResource(R.xml.preferences);
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.macmini.baculator;
 
 import android.app.ActionBar;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private CollapsingToolbarLayout mCollapse;
     private CoordinatorLayout mContainer;
     private AppBarLayout mAppBarLayout;
+    private ImageView mArrow;
 
     static final String DRINK_LIST = "drinkList";
     static final String GENDER = "gender";
@@ -70,21 +72,22 @@ public class MainActivity extends AppCompatActivity {
             //genderSelection = savedInstanceState.getInt(GENDER);
         }
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // --> Misc Layouts Initialized <-- //
         mCollapse = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         mMenu = (FloatingActionMenu) findViewById(R.id.menu);
         if (mMenu != null) {
-            mMenu.hideMenu(true);
             mMenu.setMenuButtonShowAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
             mMenu.setMenuButtonHideAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_to_bottom));
         }
         mCalculate = (Button) findViewById(R.id.calculate);
+        mArrow = (ImageView) findViewById(R.id.arrow);
 
         // --> Person Info Initialized Here <-- //
-        mPerson = (LinearLayout) findViewById(R.id.person);
+//        mPerson = (LinearLayout) findViewById(R.id.person);
         mCard = (CardView) findViewById(R.id.card);
         mWeight = (TextInputEditText) findViewById(R.id.weight);
         mGender = (RadioGroup) findViewById(R.id.gender);
@@ -176,8 +179,14 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setCallback(new Snackbar.Callback() {
                    @Override
                     public void onDismissed(Snackbar snackbar, int event) {
-                       drinkList.remove(viewHolder.getAdapterPosition());
-                       mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                       try {
+                           drinkList.remove(viewHolder.getAdapterPosition());
+                           mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                       } catch(Exception e) {
+                           final Snackbar errorSnack = Snackbar
+                                   .make(recyclerView, "DELETING TOO FAST!!!", Snackbar.LENGTH_SHORT);
+                           errorSnack.show();
+                       }
                    }
                     @Override
                     public void onShown(Snackbar snackbar) {
@@ -189,70 +198,90 @@ public class MainActivity extends AppCompatActivity {
         });
         swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
 
+        mArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Hello SnackBar!", Snackbar.LENGTH_SHORT)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Perform anything for the action selected
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        // Checks for AppBar close/open event
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-                if (offset == 0) {
-                    mMenu.hideMenu(true);
-                    mCalculate.setText(getResources().getString(R.string.pull));
+                offset = Math.abs(offset); //makes positive offset values - easier to work with
+                if (offset <= appBarLayout.getTotalScrollRange()/2) {
+//                    mMenu.hideMenu(true);
+//                    mCard.setVisibility(View.GONE);
+                    mArrow.setVisibility(View.VISIBLE);
+                    mArrow.animate().rotation(0);
                 }
-                else {
-                    mMenu.showMenu(true);
-                    mCalculate.setText(getResources().getString(R.string.calc));
+                else if (offset > appBarLayout.getTotalScrollRange()/2) {
+//                    mMenu.showMenu(true);
+//                    mCard.setVisibility(View.VISIBLE);
+                    mArrow.setVisibility(View.GONE);
+                    mArrow.animate().rotation(-180);
                 }
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Drinks drinks = drinkList.get(position);
-                final int pos = position;
-
-                final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.setContentView(R.layout.list_item);
-                dialog.setTitle(drinks.getmDrink());
-
-                try {
-                    final ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
-                    img.setImageDrawable(drinks.getmImg());
-                    final TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
-                    qty.setText(Integer.toString(drinks.getmQty()));
-                    qty.setSelectAllOnFocus(true);
-                    final TextInputEditText oz = (TextInputEditText) dialog.findViewById(R.id.oz);
-                    oz.setText(Double.toString(drinks.getmOz()));
-                    oz.setSelectAllOnFocus(true);
-                    final TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
-                    drinkDesc.setText(drinks.getmDrink());
-                    final TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
-                    abv.setText(Double.toString(drinks.getmAlc_content()));
-                    abv.setSelectAllOnFocus(true);
-
-                    dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
-                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            Drinks drinks = drinkList.get(pos);
-                            drinks.setmQty(Integer.parseInt(qty.getText().toString()));
-                            drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
-                            drinks.setmOz(Double.parseDouble(oz.getText().toString()));
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                dialog.show();
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                Drinks drinks = drinkList.get(position);
+//                final int pos = position;
+//
+//                final Dialog dialog = new Dialog(MainActivity.this);
+//                dialog.setContentView(R.layout.list_item);
+//                dialog.setTitle(drinks.getmDrink());
+//
+//                try {
+//                    final ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
+//                    img.setImageDrawable(drinks.getmImg());
+//                    final TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
+//                    qty.setText(Integer.toString(drinks.getmQty()));
+//                    qty.setSelectAllOnFocus(true);
+//                    final TextInputEditText oz = (TextInputEditText) dialog.findViewById(R.id.oz);
+//                    oz.setText(Double.toString(drinks.getmOz()));
+//                    oz.setSelectAllOnFocus(true);
+//                    final TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
+//                    drinkDesc.setText(drinks.getmDrink());
+//                    final TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
+//                    abv.setText(Double.toString(drinks.getmAlc_content()));
+//                    abv.setSelectAllOnFocus(true);
+//
+//                    dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+//                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//
+//                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                        @Override
+//                        public void onDismiss(DialogInterface dialog) {
+//                            Drinks drinks = drinkList.get(pos);
+//                            drinks.setmQty(Integer.parseInt(qty.getText().toString()));
+//                            drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
+//                            drinks.setmOz(Double.parseDouble(oz.getText().toString()));
+//                            mAdapter.notifyDataSetChanged();
+//                        }
+//                    });
+//                } catch (Exception e) {
+//                    Toast.makeText(getApplicationContext(),
+//                            e.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//                dialog.show();
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//
+//            }
+//        }));
 
 
 //        mCard.setVisibility(View.GONE);
