@@ -1,7 +1,6 @@
 package com.example.macmini.baculator;
 
 import android.app.ActionBar;
-import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +23,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -38,26 +36,83 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionMenu mMenu;
-    private FloatingActionButton mBeer, mShots, mWine;
-    private TextView mCalculate;
-    private TextInputEditText mWeight;
-    private RadioGroup mGender;
-    private Spinner mWeightUnit;
-    private TextInputEditText mWater, mTime;
+    // --> Person Info Here <-- //
+    @BindView(R.id.card) CardView mCard;
+    @BindView(R.id.weight) TextInputEditText mWeight;
+    @BindView(R.id.gender) Spinner mGender;
+    @BindView(R.id.weight_unit) Spinner mWeightUnit;
+    @BindView(R.id.time) TextInputEditText mTime;
+
+    // --> Floating Action Menu/Button <-- //
+    @BindView(R.id.menu) FloatingActionMenu mMenu;
+
+    @BindView(R.id.arrow) ImageView mArrow;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
+    // --> Miscellaneous Layouts <-- //
+    @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.main_collapsing) CollapsingToolbarLayout mCollapse;
+    @BindView(R.id.app_bar_layout) AppBarLayout mAppBarLayout;
+
+    @OnClick({R.id.app_bar_layout, R.id.main_collapsing, R.id.toolbar})
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @OnClick(R.id.calculate)
+    public void calculate(Button mCalculate) {
+        try {
+            mCalculate.setText(calculateBAC());
+        } catch (Exception e) {
+            mCalculate.setText("Missing Information");
+            e.printStackTrace();
+        }
+    }
+
+    // FAB Button OnClicks
+    @OnClick({R.id.shots, R.id.beer, R.id.wine})
+    public void addDrink(FloatingActionButton fab) {
+        int mImg;
+        double mOz, mAlcContent;
+        String mDesc;
+        switch (fab.getId()) {
+            case R.id.shots :
+                mImg = R.drawable.ic_shots_fab;
+                mOz = 1.5;
+                mDesc = getResources().getString(R.string.shots_desc);
+                mAlcContent = 40;
+                break;
+            case R.id.wine :
+                mImg = R.drawable.ic_wine_fab;
+                mOz = 6;
+                mDesc = getResources().getString(R.string.wine_desc);
+                mAlcContent = 12;
+                break;
+            default :
+                mImg = R.drawable.ic_beer_fab;
+                mOz = 12;
+                mDesc = getResources().getString(R.string.beer_desc);
+                mAlcContent = 5;
+                break;
+        }
+        Drinks drink = new Drinks(getResources().getDrawable(mImg, getTheme()),
+                1, mOz, mDesc, mAlcContent, View.GONE);
+        mAdapter.notifyItemInserted(mAdapter.getItemCount());
+        drinkList.add(drink);
+        mMenu.close(true);
+    }
+
 
     private ArrayList<Drinks> drinkList = new ArrayList<>();
-    private RecyclerView recyclerView;
     private DrinkAdapter mAdapter;
-    private CardView mCard;
-    private LinearLayout mPerson;
-    private CollapsingToolbarLayout mCollapse;
-    private CoordinatorLayout mContainer;
-    private AppBarLayout mAppBarLayout;
-    private ImageView mArrow;
 
     static final String DRINK_LIST = "drinkList";
     static final String GENDER = "gender";
@@ -69,90 +124,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             drinkList = savedInstanceState.getParcelableArrayList(DRINK_LIST);
-            //genderSelection = savedInstanceState.getInt(GENDER);
         }
         setContentView(R.layout.activity_main);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        // --> Misc Layouts Initialized <-- //
-        mCollapse = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
-        mMenu = (FloatingActionMenu) findViewById(R.id.menu);
-        if (mMenu != null) {
-            mMenu.setMenuButtonShowAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
-            mMenu.setMenuButtonHideAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_to_bottom));
-        }
-        mCalculate = (Button) findViewById(R.id.calculate);
-        mArrow = (ImageView) findViewById(R.id.arrow);
-
-        // --> Person Info Initialized Here <-- //
-//        mPerson = (LinearLayout) findViewById(R.id.person);
-        mCard = (CardView) findViewById(R.id.card);
-        mWeight = (TextInputEditText) findViewById(R.id.weight);
-        mGender = (RadioGroup) findViewById(R.id.gender);
-        mWeightUnit = (Spinner) findViewById(R.id.weight_unit);
-        mWater = (TextInputEditText) findViewById(R.id.water);
-        mTime = (TextInputEditText) findViewById(R.id.time);
+        mMenu.setMenuButtonShowAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
+        mMenu.setMenuButtonHideAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_to_bottom));
 
         // --> RecyclerView Stuff Here <-- //
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mAdapter = new DrinkAdapter(drinkList);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
-
-        // Shots FAB
-        mShots = (FloatingActionButton) findViewById(R.id.shots);
-        mShots.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_shots_fab, getTheme()),
-                        1, 1.5, "Shot of Liquor", 40, View.GONE);
-                drinkList.add(drinks);
-                mAdapter.notifyItemInserted(mAdapter.getItemCount());
-                mMenu.close(true);
-            }
-        });
-
-        // Wine FAB
-        mWine = (FloatingActionButton) findViewById(R.id.wine);
-        mWine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_wine_fab, getTheme()),
-                        1, 6, "Glass of Wine", 12, View.GONE);
-                drinkList.add(drinks);
-                mAdapter.notifyItemInserted(mAdapter.getItemCount());
-                mMenu.close(true);
-            }
-        });
-
-        // Beer FAB
-        mBeer = (FloatingActionButton) findViewById(R.id.beer);
-        mBeer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drinks drinks = new Drinks(getResources().getDrawable(R.drawable.ic_beer_fab, getTheme()),
-                        1, 12, "12oz of Beer", 5, View.GONE);
-                drinkList.add(drinks);
-                mAdapter.notifyItemInserted(mAdapter.getItemCount());
-                mMenu.close(true);
-            }
-        });
-
-        // calculate button
-        mCalculate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    mCalculate.setText(calculateBAC());
-                } catch (Exception e) {
-                    mCalculate.setText("Missing Information");
-                    e.printStackTrace();
-                }
-            }
-        });
 
         // --> Swipe to Dismiss Drink Items <-- //
         ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
@@ -232,85 +216,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-//                Drinks drinks = drinkList.get(position);
-//                final int pos = position;
-//
-//                final Dialog dialog = new Dialog(MainActivity.this);
-//                dialog.setContentView(R.layout.list_item);
-//                dialog.setTitle(drinks.getmDrink());
-//
-//                try {
-//                    final ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
-//                    img.setImageDrawable(drinks.getmImg());
-//                    final TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
-//                    qty.setText(Integer.toString(drinks.getmQty()));
-//                    qty.setSelectAllOnFocus(true);
-//                    final TextInputEditText oz = (TextInputEditText) dialog.findViewById(R.id.oz);
-//                    oz.setText(Double.toString(drinks.getmOz()));
-//                    oz.setSelectAllOnFocus(true);
-//                    final TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
-//                    drinkDesc.setText(drinks.getmDrink());
-//                    final TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
-//                    abv.setText(Double.toString(drinks.getmAlc_content()));
-//                    abv.setSelectAllOnFocus(true);
-//
-//                    dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
-//                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-//
-//                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialog) {
-//                            Drinks drinks = drinkList.get(pos);
-//                            drinks.setmQty(Integer.parseInt(qty.getText().toString()));
-//                            drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
-//                            drinks.setmOz(Double.parseDouble(oz.getText().toString()));
-//                            mAdapter.notifyDataSetChanged();
-//                        }
-//                    });
-//                } catch (Exception e) {
-//                    Toast.makeText(getApplicationContext(),
-//                            e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//                dialog.show();
-//            }
-//
-//            @Override
-//            public void onLongClick(View view, int position) {
-//
-//            }
-//        }));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Drinks drinks = drinkList.get(position);
+                final int pos = position;
 
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.list_item);
+                dialog.setTitle(drinks.getmDrink());
 
-//        mCard.setVisibility(View.GONE);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mCard.setVisibility(View.VISIBLE);
-////                mPerson.setVisibility(View.VISIBLE);
-////                mCollapse.setVisibility(View.VISIBLE);
-//
-//                Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-////                mCollapse.setAnimation(bottom);
-//                mCard.setAnimation(bottom);
-////                mPerson.setAnimation(bottom);
-//            }
-//        }, 0);
+                try {
+                    final ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
+                    img.setImageDrawable(drinks.getmImg());
+                    final TextInputEditText qty = (TextInputEditText) dialog.findViewById(R.id.qty);
+                    qty.setText(Integer.toString(drinks.getmQty()));
+                    qty.setSelectAllOnFocus(true);
+                    final TextInputEditText oz = (TextInputEditText) dialog.findViewById(R.id.oz);
+                    oz.setText(Double.toString(drinks.getmOz()));
+                    oz.setSelectAllOnFocus(true);
+                    final TextView drinkDesc = (TextView) dialog.findViewById(R.id.drink);
+                    drinkDesc.setText(drinks.getmDrink());
+                    final TextInputEditText abv = (TextInputEditText) dialog.findViewById(R.id.alc_content);
+                    abv.setText(Double.toString(drinks.getmAlc_content()));
+                    abv.setSelectAllOnFocus(true);
 
-//        mMenu.hideMenu(false);
-//        new Handler().postDelayed(new Runnable() {
-//           @Override
-//            public void run() {
-//               mMenu.showMenu(true);
-//
-//               Animation shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.hide_to_bottom);
-//               Animation bottom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.show_from_bottom);
-//              // mMenu.setAnimation(bottom);
-//               mMenu.setAnimation(shake);
-//           }
-//        }, 800);
+                    dialog.getWindow().setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            Drinks drinks = drinkList.get(pos);
+                            drinks.setmQty(Integer.parseInt(qty.getText().toString()));
+                            drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
+                            drinks.setmOz(Double.parseDouble(oz.getText().toString()));
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                dialog.show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     @Override
@@ -323,12 +278,10 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putParcelableArrayList(DRINK_LIST, drinkList);
-        savedInstanceState.putInt(GENDER, mGender.getCheckedRadioButtonId());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -342,32 +295,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(this, SettingsActivity.class), 0);
                 return true;
         }
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
     private String calculateBAC() throws Exception {
 
-        BACalc calc = new BACalc();
+        Calculate calc = new Calculate();
         double bac = 0;
 
         for(int i=0 ; i<drinkList.size() ; i++){
             Drinks drinks = drinkList.get(i);
 
-                bac += drinks.getmQty() *
-                        calc.getBAC(
-                            drinks.getmOz(),
-                            drinks.getmAlc_content(),
-                            Double.parseDouble(mWeight.getText().toString()),
-                            mWeightUnit.getSelectedItem().toString(),
-                            ((RadioButton)findViewById(mGender.getCheckedRadioButtonId())).getText().toString(),
-                            Double.parseDouble(mTime.getText().toString())
-                        );
+            int qty = drinks.getmQty();
+            double oz = drinks.getmOz();
+            double alc_content = drinks.getmAlc_content();
+            double weight = Double.parseDouble(mWeight.getText().toString());
+            String weight_unit = mWeightUnit.getSelectedItem().toString();
+            String gender = mGender.getSelectedItem().toString();
+            Double time = Double.parseDouble(mTime.getText().toString());
+
+            bac += calc.getBAC(oz*qty, alc_content, weight, weight_unit, gender, time);
 
         }
         return String.valueOf((double)Math.round(bac * 100d) / 100d);

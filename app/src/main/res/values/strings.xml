@@ -7,6 +7,7 @@
     <string name="shots">Shots</string>
     <string name="beer">Beer</string>
     <string name="wine">Wine</string>
+    <string name="scan">Scan</string>
 
     <string name="gender">Gender:</string>
     <string name="male">Male</string>
@@ -19,7 +20,7 @@
     </string-array>
 
     <string-array name="gender_array">
-        <item>Select gender</item>
+        <item> </item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
@@ -43,6 +44,9 @@
     <string name="qty_label">QTY</string>
     <string name="bav_label">ABV %</string>
     <string name="oz_label">OZ</string>
+    <string name="beer_desc">Glass of Beer</string>
+    <string name="wine_desc">Glass of Wine</string>
+    <string name="shots_desc">Shot of Liquor</string>
 
     <string name="calc">Calculate</string>
 

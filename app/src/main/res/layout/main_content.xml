@@ -1,128 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:paddingRight="4dp"
+        android:paddingLeft="4dp"
+        android:weightSum="4"
+        android:gravity="center">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:gravity="center">
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="@string/gender" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="?android:attr/textAppearance"
-                android:paddingRight="8dp"
-                android:text="@string/gender" />
-
-            <RadioGroup
-                android:id="@+id/gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="8dp"
-                android:freezesText="true">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/male"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:freezesText="true" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/female"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:freezesText="true" />
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/gender"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:gravity="center">
+            android:entries="@array/gender_array"
+            android:freezesText="true"
+            android:layout_weight="2.5">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="56dp"
-                android:layout_height="wrap_content">
+        </android.support.v7.widget.AppCompatSpinner>
+        <!--<RadioGroup-->
+            <!--android:id="@+id/gender"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left|center_vertical"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingLeft="8dp"-->
+            <!--android:freezesText="true">-->
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="8dp"
-                    android:inputType="numberDecimal"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:hint="@string/weight"
-                    android:freezesText="true"/>
+            <!--<RadioButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/male"-->
+                <!--android:textAppearance="?android:attr/textAppearance"-->
+                <!--android:freezesText="true" />-->
 
-            </android.support.design.widget.TextInputLayout>
-
-            <Spinner
-                android:id="@+id/weight_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:entries="@array/unit_array"
-                android:textAppearance="?android:attr/textAppearance"
-                android:freezesText="true"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/water"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:hint="@string/water"
-                    android:freezesText="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/time"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:inputType="numberDecimal"
-                    android:hint="@string/time"
-                    android:freezesText="true"/>
-
-        </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+            <!--<RadioButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/female"-->
+                <!--android:textAppearance="?android:attr/textAppearance"-->
+                <!--android:freezesText="true" />-->
+        <!--</RadioGroup>-->
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingRight="4dp"
+        android:paddingLeft="4dp"
+        android:weightSum="4"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="@string/weight" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.25">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textAppearance="?android:attr/textAppearance"
+                android:hint="@string/weight"
+                android:freezesText="true"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/weight_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/unit_array"
+            android:textAppearance="?android:attr/textAppearance"
+            android:layout_weight="1.25"
+            android:freezesText="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingRight="4dp"
+        android:paddingLeft="4dp"
+        android:weightSum="4"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="Drinking Time:" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:layout_gravity="bottom">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearance"
+                android:inputType="numberDecimal"
+                android:hint="@string/time"
+                android:freezesText="true"/>
+
+    </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+</LinearLayout>
