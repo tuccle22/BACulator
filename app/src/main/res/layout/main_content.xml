@@ -31,29 +31,6 @@
             android:layout_weight="2.5">
 
         </android.support.v7.widget.AppCompatSpinner>
-        <!--<RadioGroup-->
-            <!--android:id="@+id/gender"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="left|center_vertical"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:paddingLeft="8dp"-->
-            <!--android:freezesText="true">-->
-
-            <!--<RadioButton-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/male"-->
-                <!--android:textAppearance="?android:attr/textAppearance"-->
-                <!--android:freezesText="true" />-->
-
-            <!--<RadioButton-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/female"-->
-                <!--android:textAppearance="?android:attr/textAppearance"-->
-                <!--android:freezesText="true" />-->
-        <!--</RadioGroup>-->
 
     </LinearLayout>
 
