@@ -10,6 +10,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +29,11 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.macmini.baculator.PersonFragments.PersonAdapter;
+import com.example.macmini.baculator.PersonFragments.TimeFragment;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -39,22 +42,26 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.relex.circleindicator.CircleIndicator;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    // --> Person Info Here <-- //
-    @BindView(R.id.card) CardView mCard;
-    @BindView(R.id.weight) TextInputEditText mWeight;
-    @BindView(R.id.gender) Spinner mGender;
-    @BindView(R.id.weight_unit) Spinner mWeightUnit;
-    @BindView(R.id.time) TextInputEditText mTime;
+//    // --> Person Info Here <-- //
+//    @BindView(R.id.card) CardView mCard;
+//    @BindView(R.id.text_input) TextInputEditText input;
+//    @BindView(R.id.weight_input) TextInputEditText mWeight;
+//    @BindView(R.id.done_fab) android.support.design.widget.FloatingActionButton mDoneFab;
 
     // --> Floating Action Menu/Button <-- //
     @BindView(R.id.menu) FloatingActionMenu mMenu;
 
-    @BindView(R.id.arrow) ImageView mArrow;
     @BindView(R.id.toolbar) Toolbar toolbar;
+
+    // --> ViewPager Person Information <-- //
+    @BindView(R.id.indicator) CircleIndicator indicator;
+    @BindView(R.id.view_pager) ViewPager view_pager;
+
 
     // --> Miscellaneous Layouts <-- //
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
@@ -118,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
     static final String GENDER = "gender";
 
 
+    private FragmentPagerAdapter adapterViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +146,46 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mAdapter);
+
+        // --> Person Information ViewPager <-- //
+        adapterViewPager = new PersonAdapter(getSupportFragmentManager());
+        view_pager.setAdapter(adapterViewPager);
+        view_pager.setOffscreenPageLimit(3);
+        view_pager.setClipToPadding(false);
+        view_pager.setPageMargin(24);
+        indicator.setViewPager(view_pager);
+
+
+//        android.support.design.widget.FloatingActionButton mDoneFab = (android.support.design.widget.FloatingActionButton) findViewById(R.id.done_fab);
+//        if (mDoneFab != null) {
+//            mDoneFab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    TranslateAnimation animation = new TranslateAnimation(0, mMenu.getX() - mDoneFab.getX(), 0, mMenu.getY() - mDoneFab.getY());
+//                    animation.setRepeatMode(0);
+//                    animation.setDuration(3000);
+//                    animation.setFillAfter(true);
+//                    mDoneFab.startAnimation(animation);
+//                }
+//            });
+//        }
+
+//        // Checks for AppBar close/open event
+//        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+//                offset = Math.abs(offset); //makes positive offset values - easier to work with
+//                if (offset <= appBarLayout.getTotalScrollRange()/2) {
+////                    mMenu.hideMenu(true);
+//                    mCard.setVisibility(View.GONE);
+//                }
+//                else if (offset > appBarLayout.getTotalScrollRange()/2) {
+////                    mMenu.showMenu(true);
+//                    mCard.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
         // --> Swipe to Dismiss Drink Items <-- //
         ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
@@ -181,40 +230,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
-
-        mArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Hello SnackBar!", Snackbar.LENGTH_SHORT)
-                        .setAction("Undo", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // Perform anything for the action selected
-                            }
-                        })
-                        .show();
-            }
-        });
-
-        // Checks for AppBar close/open event
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-                offset = Math.abs(offset); //makes positive offset values - easier to work with
-                if (offset <= appBarLayout.getTotalScrollRange()/2) {
-//                    mMenu.hideMenu(true);
-//                    mCard.setVisibility(View.GONE);
-                    mArrow.setVisibility(View.VISIBLE);
-                    mArrow.animate().rotation(0);
-                }
-                else if (offset > appBarLayout.getTotalScrollRange()/2) {
-//                    mMenu.showMenu(true);
-//                    mCard.setVisibility(View.VISIBLE);
-                    mArrow.setVisibility(View.GONE);
-                    mArrow.animate().rotation(-180);
-                }
-            }
-        });
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
@@ -298,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private String calculateBAC() throws Exception {
 
         Calculate calc = new Calculate();
@@ -309,12 +325,9 @@ public class MainActivity extends AppCompatActivity {
             int qty = drinks.getmQty();
             double oz = drinks.getmOz();
             double alc_content = drinks.getmAlc_content();
-            double weight = Double.parseDouble(mWeight.getText().toString());
-            String weight_unit = mWeightUnit.getSelectedItem().toString();
-            String gender = mGender.getSelectedItem().toString();
-            Double time = Double.parseDouble(mTime.getText().toString());
-
-            bac += calc.getBAC(oz*qty, alc_content, weight, weight_unit, gender, time);
+//            double weight = Double.parseDouble(mWeight.getText().toString());
+//            Double time = Double.parseDouble(mTime.getText().toString());
+//            bac += calc.getBAC(oz*qty, alc_content, weight, weight_unit, gender, time);
 
         }
         return String.valueOf((double)Math.round(bac * 100d) / 100d);

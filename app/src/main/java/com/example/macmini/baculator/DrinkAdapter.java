@@ -1,8 +1,5 @@
 package com.example.macmini.baculator;
 
-/**
- * Created by MacMini on 6/3/16.
- */
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,13 +18,13 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
 
     public ArrayList<Drinks> drinkList;
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.drink) TextView drink;
         @BindView(R.id.qty) TextInputEditText qty;
         @BindView(R.id.alc_content) TextInputEditText alc_content;
         @BindView(R.id.oz) TextInputEditText oz;
         @BindView(R.id.ic_view) ImageView ic_view;
-        @BindView(R.id.removed_row) TextView removed_row;
 
 
         public MyViewHolder(View view) {
@@ -56,7 +53,6 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
         holder.oz.setText(String.valueOf(drinks.getmOz()));
         holder.ic_view.setImageDrawable(drinks.getmImg());
         holder.alc_content.setText(String.valueOf(drinks.getmAlc_content()));
-        holder.removed_row.setText(drinks.getmDrink());
     }
 
     @Override

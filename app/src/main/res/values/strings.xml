@@ -7,13 +7,18 @@
     <string name="shots">Shots</string>
     <string name="beer">Beer</string>
     <string name="wine">Wine</string>
-    <string name="scan">Scan</string>
 
-    <string name="gender">Gender:</string>
+    <string name="gender">What is your sex?</string>
+    <string name="weight">What is your weight?</string>
+    <string name="weight_hint">Enter Weight</string>
+    <string name="time">Hours elapsed?</string>
+    <string name="time_hint">Drinking Time (hrs)</string>
+    <string name="done">Ready to add alcohol?</string>
+
     <string name="male">Male</string>
     <string name="female">Female</string>
 
-    <string name="weight">Weight</string>
+
     <string-array name="unit_array">
         <item>pounds</item>
         <item>kilograms</item>
@@ -26,7 +31,7 @@
     </string-array>
 
     <string name="water">Water (12oz)</string>
-    <string name="time">Time Drinking (hrs)</string>
+
 
     <string-array name="qty">
         <item>1</item>
@@ -52,7 +57,8 @@
 
     <string name="icon_attributions">Created by Adrijan Karavdic from Noun Project</string>
     <string name="title_activity_settings">Settings</string>
-
+    <string name="title_activity_person_info">PersonInfo</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>
