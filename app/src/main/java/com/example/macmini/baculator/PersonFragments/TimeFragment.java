@@ -1,8 +1,11 @@
 package com.example.macmini.baculator.PersonFragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,16 +40,24 @@ public class TimeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.frag_time, container, false);
-        setTime((TextInputEditText) view.findViewById(R.id.time));
+        final PersonSingleton person = PersonSingleton.getInstance();
+        final TextInputEditText time = (TextInputEditText) view.findViewById(R.id.time_input);
+        time.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                person.setmTime(time.getText().toString());
+            }
+        });
+
         return view;
     }
 
-    public void setTime(TextInputEditText time_view){
-        this.time_view = time_view;
-    }
-
-    public Double getTime(){
-        return Double.parseDouble(time_view.getText().toString());
-    }
 }

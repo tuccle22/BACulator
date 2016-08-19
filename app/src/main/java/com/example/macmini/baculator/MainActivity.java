@@ -11,10 +11,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.macmini.baculator.PersonFragments.PersonAdapter;
-import com.example.macmini.baculator.PersonFragments.TimeFragment;
+import com.example.macmini.baculator.PersonFragments.PersonSingleton;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // FAB Button OnClicks
+    // FAB Button OnClickListeners
     @OnClick({R.id.shots, R.id.beer, R.id.wine})
     public void addDrink(FloatingActionButton fab) {
         int mImg;
@@ -316,8 +314,18 @@ public class MainActivity extends AppCompatActivity {
 
     private String calculateBAC() throws Exception {
 
+        PersonSingleton person = PersonSingleton.getInstance();
+
+        Toast.makeText(this, "Sex: " + person.getmSex() +
+                            " Weight: " + person.getmWeight() +
+                            " Unit: " + person.getmWeightUnit() +
+                            " Time: " + person.getmTime(), Toast.LENGTH_LONG).show();
+
+
+
         Calculate calc = new Calculate();
         double bac = 0;
+
 
         for(int i=0 ; i<drinkList.size() ; i++){
             Drinks drinks = drinkList.get(i);
@@ -325,9 +333,13 @@ public class MainActivity extends AppCompatActivity {
             int qty = drinks.getmQty();
             double oz = drinks.getmOz();
             double alc_content = drinks.getmAlc_content();
-//            double weight = Double.parseDouble(mWeight.getText().toString());
-//            Double time = Double.parseDouble(mTime.getText().toString());
-//            bac += calc.getBAC(oz*qty, alc_content, weight, weight_unit, gender, time);
+            bac += calc.getBAC(
+                    oz*qty,
+                    alc_content,
+                    Double.parseDouble(person.getmWeight()),
+                    person.getmWeightUnit(),
+                    person.getmSex(),
+                    Double.parseDouble(person.getmTime()));
 
         }
         return String.valueOf((double)Math.round(bac * 100d) / 100d);

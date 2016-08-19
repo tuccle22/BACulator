@@ -14,6 +14,7 @@
     <string name="time">Hours elapsed?</string>
     <string name="time_hint">Drinking Time (hrs)</string>
     <string name="done">Ready to add alcohol?</string>
+    <string name="done_text">Pull up to begin</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>

@@ -15,12 +15,12 @@
         android:gravity="center"
         android:text="@string/done" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/done_fab"
+    <TextView
+        android:id="@+id/done_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:src="@drawable/ic_check"
-        android:tint="@android:color/white"/>
+        android:gravity="center"
+        android:text="@string/done_text"/>
 </LinearLayout>

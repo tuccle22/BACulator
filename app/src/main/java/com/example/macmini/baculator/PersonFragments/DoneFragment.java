@@ -53,17 +53,17 @@ public class DoneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_done, container, false);
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.done_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TranslateAnimation animation = new TranslateAnimation(0, 215,0 , 110);
-                animation.setRepeatMode(0);
-                animation.setDuration(3000);
-                animation.setFillAfter(true);
-                fab.startAnimation(animation);
-            }
-        });
+//        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.done_fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                TranslateAnimation animation = new TranslateAnimation(0, 215,0 , 110);
+//                animation.setRepeatMode(0);
+//                animation.setDuration(3000);
+//                animation.setFillAfter(true);
+//                fab.startAnimation(animation);
+//            }
+//        });
         return inflater.inflate(R.layout.frag_done, container, false);
     }
 }

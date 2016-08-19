@@ -1,9 +1,5 @@
 package com.example.macmini.baculator;
 
-/**
- * Created by MacMini on 6/4/16.
- */
-
 
 /*********************    W-I-D-M-A-R-K---F-O-R-M-U-L-A     ***********************
  *                                                                               **
@@ -15,8 +11,8 @@ package com.example.macmini.baculator;
 
 public class Calculate {
 
-    private final double male = 0.73;
-    private final double female = 0.66;
+    private final double MALE = 0.73;
+    private final double FEMALE = 0.66;
 
     public double getBAC (double oz, double abv, double weight, String weight_unit, String gender, double hours) {
 
@@ -37,7 +33,7 @@ public class Calculate {
     }
 
     private double getGender (String gender) {
-        return gender.equals("female") ? female : male;
+        return gender.equals("female") ? FEMALE : MALE;
     }
 
 }
