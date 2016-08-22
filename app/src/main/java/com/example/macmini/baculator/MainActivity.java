@@ -2,6 +2,7 @@ package com.example.macmini.baculator;
 
 import android.app.ActionBar;
 import android.app.Dialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +24,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,20 +36,21 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnPageChange;
 import me.relex.circleindicator.CircleIndicator;
 
 
 public class MainActivity extends AppCompatActivity {
 
-//    // --> Person Info Here <-- //
-//    @BindView(R.id.card) CardView mCard;
-//    @BindView(R.id.text_input) TextInputEditText input;
-//    @BindView(R.id.weight_input) TextInputEditText mWeight;
-//    @BindView(R.id.done_fab) android.support.design.widget.FloatingActionButton mDoneFab;
+    public static final int GENDER = 0;
+    public static final int WEIGHT = 1;
+    public static final int TIME = 2;
+    public static final int DONE = 3;
 
     // --> Floating Action Menu/Button <-- //
     @BindView(R.id.menu) FloatingActionMenu mMenu;
@@ -61,16 +62,57 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.view_pager) ViewPager view_pager;
 
 
+    @OnPageChange(R.id.view_pager)
+    public void onPageSelected (int position) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
+        View view = view_pager.getRootView();
+        switch (position) {
+            case GENDER:
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                break;
+            case WEIGHT:
+                TextInputEditText weight = (TextInputEditText) view.findViewById(R.id.weight_input);
+                weight.requestFocus();
+                imm.showSoftInput(weight, InputMethodManager.SHOW_IMPLICIT);
+                break;
+            case TIME:
+                TextInputEditText time = (TextInputEditText) view.findViewById(R.id.time_input);
+                time.requestFocus();
+                imm.showSoftInput(time, InputMethodManager.SHOW_IMPLICIT);
+                break;
+            case DONE:
+                // DONE WEIGHT //
+                TextView done_weight = (TextView) view.findViewById(R.id.done_weight);
+                done_weight.setText(PersonSingleton.getInstance().getmWeight());
+                // DONE WEIGHT MEASUREMENT //
+                TextView done_weight_measure = (TextView) view.findViewById(R.id.done_weight_measure);
+                done_weight_measure.setText(PersonSingleton.getInstance().getmWeightUnit());
+                // DONE GENDER IMAGE //
+                ImageView done_gender = (ImageView) view.findViewById(R.id.done_sex);
+                if (Objects.equals(PersonSingleton.getInstance().getmSex(), "male")) {
+                    done_gender.setImageDrawable(view.getResources().getDrawable(R.mipmap.ic_male, getTheme()));
+                } else if (Objects.equals(PersonSingleton.getInstance().getmSex(), "female")){
+                    done_gender.setImageDrawable(view.getResources().getDrawable(R.mipmap.ic_female, getTheme()));
+                }
+                // DONE TIME //
+                TextView done_time = (TextView) view.findViewById(R.id.done_time);
+                done_time.setText(String.format("Drinking for %s %s", PersonSingleton.getInstance().getmTime(), "hours"));
+
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                break;
+        }
+    }
+
     // --> Miscellaneous Layouts <-- //
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.main_collapsing) CollapsingToolbarLayout mCollapse;
     @BindView(R.id.app_bar_layout) AppBarLayout mAppBarLayout;
 
-    @OnClick({R.id.app_bar_layout, R.id.main_collapsing, R.id.toolbar})
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+//    @OnClick({R.id.app_bar_layout, R.id.main_collapsing, R.id.toolbar})
+//    public void hideKeyboard(View view) {
+//        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//    }
 
     @OnClick(R.id.calculate)
     public void calculate(Button mCalculate) {
@@ -120,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
     private DrinkAdapter mAdapter;
 
     static final String DRINK_LIST = "drinkList";
-    static final String GENDER = "gender";
 
 
     private FragmentPagerAdapter adapterViewPager;
@@ -136,8 +177,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        mMenu.setMenuButtonShowAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
-        mMenu.setMenuButtonHideAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_to_bottom));
 
         // --> RecyclerView Stuff Here <-- //
         mAdapter = new DrinkAdapter(drinkList);
@@ -154,20 +193,53 @@ public class MainActivity extends AppCompatActivity {
         indicator.setViewPager(view_pager);
 
 
-//        android.support.design.widget.FloatingActionButton mDoneFab = (android.support.design.widget.FloatingActionButton) findViewById(R.id.done_fab);
-//        if (mDoneFab != null) {
-//            mDoneFab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    TranslateAnimation animation = new TranslateAnimation(0, mMenu.getX() - mDoneFab.getX(), 0, mMenu.getY() - mDoneFab.getY());
-//                    animation.setRepeatMode(0);
-//                    animation.setDuration(3000);
-//                    animation.setFillAfter(true);
-//                    mDoneFab.startAnimation(animation);
-//                }
-//            });
-//        }
+        view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        imm.showSoftInput(view_pager,0);
+                        break;
+                    case 2:
+                        imm.showSoftInput(view_pager,0);
+                        break;
+                    case 3:
+                        View view = view_pager.getRootView();
+                        TextView done_weight = (TextView) view.findViewById(R.id.done_weight);
+                        TextView done_weight_measure = (TextView) view.findViewById(R.id.done_weight_measure);
+                        ImageView done_gender = (ImageView) view.findViewById(R.id.done_sex);
+                        TextView done_time = (TextView) view.findViewById(R.id.done_time);
+
+                        done_weight.setText(PersonSingleton.getInstance().getmWeight());
+                        done_weight_measure.setText(PersonSingleton.getInstance().getmWeightUnit());
+
+                        if (Objects.equals(PersonSingleton.getInstance().getmSex(), "male")) {
+                            done_gender.setImageDrawable(view.getResources().getDrawable(R.mipmap.ic_male, getTheme()));
+                        } else {
+                            done_gender.setImageDrawable(view.getResources().getDrawable(R.mipmap.ic_female, getTheme()));
+                        }
+                        done_time.setText(String.format("Drinking for %s %s", PersonSingleton.getInstance().getmTime(), "hours"));
+
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
 //        // Checks for AppBar close/open event
 //        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {

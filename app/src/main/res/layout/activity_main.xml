@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorBackGround"
-    android:clickable="true"
-    android:focusableInTouchMode="true">
+    android:clickable="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -56,21 +55,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:behavior_overlapTop="96dp">
+        app:behavior_overlapTop="82dp">
 
-        <android.support.v7.widget.CardView
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="156dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp">
+            android:layout_height="@dimen/view_pager">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="-72dp" />
+                android:layout_height="@dimen/view_pager"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:clickable="true" />
 
             <me.relex.circleindicator.CircleIndicator
                 android:id="@+id/indicator"
@@ -80,29 +80,25 @@
                 app:ci_drawable="@drawable/blue_circle"
                 app:ci_drawable_unselected="@drawable/black_circle"/>
 
-        </android.support.v7.widget.CardView>
+        </FrameLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-
+            android:paddingBottom="@dimen/calculate_card"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:behavior_overlapTop="250dp" />
-
-
 
     </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="80dp"
+        android:layout_height="@dimen/calculate_card"
         app:cardCornerRadius="0dp"
         android:layout_gravity="bottom"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true">
 
@@ -121,11 +117,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="2dp"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:tint="@android:color/white"
         android:layout_gravity="bottom|end"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior=".FloatingActionMenuBehavior">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/shots"

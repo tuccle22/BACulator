@@ -3,6 +3,12 @@
     <string name="action_about">About</string>
     <string name="action_settings">Settings</string>
 
+    <plurals
+        name="hours">
+        <item quantity="zero">hours</item>
+        <item quantity="one">hour</item>
+        <item quantity="other">hours</item>
+    </plurals>
 
     <string name="shots">Shots</string>
     <string name="beer">Beer</string>
@@ -13,12 +19,11 @@
     <string name="weight_hint">Enter Weight</string>
     <string name="time">Hours elapsed?</string>
     <string name="time_hint">Drinking Time (hrs)</string>
-    <string name="done">Ready to add alcohol?</string>
+    <string name="done">Add Alcohol and Calculate</string>
     <string name="done_text">Pull up to begin</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>
-
 
     <string-array name="unit_array">
         <item>pounds</item>
@@ -31,8 +36,7 @@
         <item>Female</item>
     </string-array>
 
-    <string name="water">Water (12oz)</string>
-
+    <string name="edit">Edit</string>
 
     <string-array name="qty">
         <item>1</item>

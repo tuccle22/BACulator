@@ -23,13 +23,13 @@ public class PersonAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return GenderFragment.newInstance(0, "sex");
+                return GenderFragment.newInstance();
             case 1:
-                return WeightFragment.newInstance(1, "lbs");
+                return WeightFragment.newInstance();
             case 2:
-                return TimeFragment.newInstance(2, "time");
+                return TimeFragment.newInstance();
             case 3:
-                return DoneFragment.newInstance(3, "done");
+                return DoneFragment.newInstance();
             default:
                 return null;
         }

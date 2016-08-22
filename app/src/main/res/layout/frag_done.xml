@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/done_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    android:weightSum="2">
 
-    <TextView
-        android:id="@+id/label"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle"
-        android:gravity="center"
-        android:text="@string/done" />
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/done_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/done_weight_measure"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/done_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            android:contentDescription="@string/gender" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/done_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/done_time"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:text="@string/done_text"/>
+        android:layout_gravity="bottom|center"
+        android:gravity="center" />
+
 </LinearLayout>
+</android.support.v7.widget.CardView>
