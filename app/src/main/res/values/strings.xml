@@ -36,7 +36,7 @@
         <item>Female</item>
     </string-array>
 
-    <string name="edit">Edit</string>
+    <string name="reset">Reset</string>
 
     <string-array name="qty">
         <item>1</item>

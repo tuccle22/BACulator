@@ -1,6 +1,7 @@
 package com.example.macmini.baculator.PersonFragments;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Spinner;
 
 import com.example.macmini.baculator.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
 import butterknife.OnTextChanged;

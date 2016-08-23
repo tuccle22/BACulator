@@ -14,12 +14,12 @@ public class Calculate {
     private final double MALE = 0.73;
     private final double FEMALE = 0.66;
 
-    public double getBAC (double oz, double abv, double weight, String weight_unit, String gender, double hours) {
+    public double getBAC (double oz, double abv, double weight, String weight_unit, String gender) {
 
         double alcohol_val = getAlcoholContent(oz, abv);
         double weight_val = getBodyWeightGrams(weight, weight_unit);
         double gender_val = getGender(gender);
-        double blood_alcohol_content = alcohol_val / (weight_val * gender_val) - (.015 * hours);
+        double blood_alcohol_content = alcohol_val / (weight_val * gender_val);
 
         return blood_alcohol_content;
     }

@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder> {
 
 
-    public ArrayList<Drinks> drinkList;
+    public static ArrayList<Drinks> drinkList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

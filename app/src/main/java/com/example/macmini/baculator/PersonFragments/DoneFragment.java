@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.macmini.baculator.DrinkAdapter;
+import com.example.macmini.baculator.Drinks;
 import com.example.macmini.baculator.MainActivity;
 import com.example.macmini.baculator.R;
 
@@ -32,11 +34,15 @@ public class DoneFragment extends Fragment {
     private CircleIndicator circleIndicator;
     @BindView(R.id.done_card) CardView done_card;
 
+    @OnClick(R.id.reset)
+    public void onResetClick(View view) {
+        DrinkAdapter.drinkList.clear();
+        view_pager.setCurrentItem(0);
+    }
+
     @OnClick({R.id.done_sex, R.id.done_weight, R.id.done_weight_measure, R.id.done_time})
     public void onClick(View view) {
-        view_pager.setOffscreenPageLimit(3);
-        view_pager.setClipToPadding(false);
-        view_pager.setPageMargin(24);
+
         switch (view.getId()){
             case R.id.done_sex:
                 view_pager.setCurrentItem(MainActivity.GENDER, true);

@@ -17,7 +17,6 @@ import butterknife.Unbinder;
 public class TimeFragment extends Fragment {
 
     private Unbinder unbinder;
-    @BindView(R.id.time_input) TextInputEditText time_input;
 
     @OnTextChanged(R.id.time_input)
     public void onTextChanged(CharSequence text) {

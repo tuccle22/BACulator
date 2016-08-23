@@ -2,12 +2,11 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/done_card"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp">
+    android:layout_height="match_parent">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="16dp"
     android:weightSum="2">
@@ -24,21 +23,25 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="2dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="weight?"/>
 
         <TextView
             android:id="@+id/done_weight_measure"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="2dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="weight unit??"/>
 
         <ImageView
             android:id="@+id/done_sex"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="2dp"
-            android:contentDescription="@string/gender" />
+            android:contentDescription="@string/gender"
+            android:src="@drawable/ic_beer_fab"
+            android:tint="@color/colorPrimary"/>
     </LinearLayout>
 
     <TextView
@@ -46,7 +49,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:gravity="center" />
+        android:gravity="center"
+        android:text="Missing Time!!!"/>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:text="@string/reset"
+        android:textColor="@android:color/holo_red_light"
+        style="?android:attr/borderlessButtonStyle"/>
 
 </LinearLayout>
 </android.support.v7.widget.CardView>

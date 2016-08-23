@@ -14,6 +14,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -55,12 +57,19 @@ public class MainActivity extends AppCompatActivity {
     // --> Floating Action Menu/Button <-- //
     @BindView(R.id.menu) FloatingActionMenu mMenu;
 
+    @BindView(R.id.card) CardView mCard;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     // --> ViewPager Person Information <-- //
     @BindView(R.id.indicator) CircleIndicator indicator;
     @BindView(R.id.view_pager) ViewPager view_pager;
 
+    @BindView(R.id.fab_next) android.support.design.widget.FloatingActionButton fab_next;
+
+    @OnClick(R.id.fab_next)
+    public void onNextClick (android.support.design.widget.FloatingActionButton fab) {
+        view_pager.setCurrentItem(view_pager.getCurrentItem() + 1 );
+    }
 
     @OnPageChange(R.id.view_pager)
     public void onPageSelected (int position) {
@@ -68,19 +77,31 @@ public class MainActivity extends AppCompatActivity {
         View view = view_pager.getRootView();
         switch (position) {
             case GENDER:
+                fab_next.setVisibility(View.VISIBLE);
+                mMenu.setVisibility(View.GONE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 break;
             case WEIGHT:
+                fab_next.setVisibility(View.VISIBLE);
+                mMenu.setVisibility(View.GONE);
                 TextInputEditText weight = (TextInputEditText) view.findViewById(R.id.weight_input);
                 weight.requestFocus();
+                weight.setSelectAllOnFocus(true);
                 imm.showSoftInput(weight, InputMethodManager.SHOW_IMPLICIT);
                 break;
             case TIME:
+                fab_next.setVisibility(View.VISIBLE);
+                mMenu.setVisibility(View.GONE);
                 TextInputEditText time = (TextInputEditText) view.findViewById(R.id.time_input);
                 time.requestFocus();
+                time.setSelectAllOnFocus(true);
                 imm.showSoftInput(time, InputMethodManager.SHOW_IMPLICIT);
                 break;
             case DONE:
+                fab_next.setVisibility(View.GONE);
+                mMenu.setVisibility(View.VISIBLE);
+                mMenu.startAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
+                mMenu.open(true);
                 // DONE WEIGHT //
                 TextView done_weight = (TextView) view.findViewById(R.id.done_weight);
                 done_weight.setText(PersonSingleton.getInstance().getmWeight());
@@ -116,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.calculate)
     public void calculate(Button mCalculate) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mCalculate.getWindowToken(), 0);
+
         try {
             mCalculate.setText(calculateBAC());
         } catch (Exception e) {
@@ -154,6 +178,10 @@ public class MainActivity extends AppCompatActivity {
                 1, mOz, mDesc, mAlcContent, View.GONE);
         mAdapter.notifyItemInserted(mAdapter.getItemCount());
         drinkList.add(drink);
+        if (mCard.getVisibility() != View.VISIBLE) {
+            mCard.setVisibility(View.VISIBLE);
+            mCard.startAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
+        }
         mMenu.close(true);
     }
 
@@ -191,54 +219,6 @@ public class MainActivity extends AppCompatActivity {
         view_pager.setClipToPadding(false);
         view_pager.setPageMargin(24);
         indicator.setViewPager(view_pager);
-
-
-        view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
-                switch (position) {
-                    case 0:
-                        break;
-                    case 1:
-                        imm.showSoftInput(view_pager,0);
-                        break;
-                    case 2:
-                        imm.showSoftInput(view_pager,0);
-                        break;
-                    case 3:
-                        View view = view_pager.getRootView();
-                        TextView done_weight = (TextView) view.findViewById(R.id.done_weight);
-                        TextView done_weight_measure = (TextView) view.findViewById(R.id.done_weight_measure);
-                        ImageView done_gender = (ImageView) view.findViewById(R.id.done_sex);
-                        TextView done_time = (TextView) view.findViewById(R.id.done_time);
-
-                        done_weight.setText(PersonSingleton.getInstance().getmWeight());
-                        done_weight_measure.setText(PersonSingleton.getInstance().getmWeightUnit());
-
-                        if (Objects.equals(PersonSingleton.getInstance().getmSex(), "male")) {
-                            done_gender.setImageDrawable(view.getResources().getDrawable(R.mipmap.ic_male, getTheme()));
-                        } else {
-                            done_gender.setImageDrawable(view.getResources().getDrawable(R.mipmap.ic_female, getTheme()));
-                        }
-                        done_time.setText(String.format("Drinking for %s %s", PersonSingleton.getInstance().getmTime(), "hours"));
-
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
 
 //        // Checks for AppBar close/open event
@@ -332,11 +312,15 @@ public class MainActivity extends AppCompatActivity {
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            Drinks drinks = drinkList.get(pos);
-                            drinks.setmQty(Integer.parseInt(qty.getText().toString()));
-                            drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
-                            drinks.setmOz(Double.parseDouble(oz.getText().toString()));
-                            mAdapter.notifyDataSetChanged();
+                            try {
+                                Drinks drinks = drinkList.get(pos);
+                                drinks.setmQty(Integer.parseInt(qty.getText().toString()));
+                                drinks.setmAlc_content(Double.parseDouble(abv.getText().toString()));
+                                drinks.setmOz(Double.parseDouble(oz.getText().toString()));
+                                mAdapter.notifyDataSetChanged();
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 } catch (Exception e) {
@@ -387,33 +371,27 @@ public class MainActivity extends AppCompatActivity {
     private String calculateBAC() throws Exception {
 
         PersonSingleton person = PersonSingleton.getInstance();
-
-        Toast.makeText(this, "Sex: " + person.getmSex() +
-                            " Weight: " + person.getmWeight() +
-                            " Unit: " + person.getmWeightUnit() +
-                            " Time: " + person.getmTime(), Toast.LENGTH_LONG).show();
-
-
-
         Calculate calc = new Calculate();
+
         double bac = 0;
-
-
         for(int i=0 ; i<drinkList.size() ; i++){
+
             Drinks drinks = drinkList.get(i);
 
             int qty = drinks.getmQty();
             double oz = drinks.getmOz();
             double alc_content = drinks.getmAlc_content();
+
             bac += calc.getBAC(
                     oz*qty,
                     alc_content,
                     Double.parseDouble(person.getmWeight()),
                     person.getmWeightUnit(),
-                    person.getmSex(),
-                    Double.parseDouble(person.getmTime()));
+                    person.getmSex()
+            );
 
         }
+        bac = bac - (.015 * Double.parseDouble(person.getmTime()));
         return String.valueOf((double)Math.round(bac * 100d) / 100d);
     }
 

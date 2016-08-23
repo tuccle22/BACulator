@@ -55,6 +55,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:foreground="?android:attr/selectableItemBackground"
         app:behavior_overlapTop="82dp">
 
 
@@ -69,8 +70,7 @@
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
                 android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:clickable="true" />
+                android:paddingTop="8dp" />
 
             <me.relex.circleindicator.CircleIndicator
                 android:id="@+id/indicator"
@@ -78,7 +78,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"
                 app:ci_drawable="@drawable/blue_circle"
-                app:ci_drawable_unselected="@drawable/black_circle"/>
+                app:ci_drawable_unselected="@drawable/blue_circle"/>
 
         </FrameLayout>
 
@@ -100,7 +100,8 @@
         app:cardCornerRadius="0dp"
         android:layout_gravity="bottom"
         android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true">
+        android:clickable="true"
+        android:visibility="gone">
 
         <Button
             android:id="@+id/calculate"
@@ -112,6 +113,17 @@
 
     </android.support.v7.widget.CardView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_next"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_next"
+        android:elevation="2dp"
+        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="22dp"
+        android:tint="@android:color/white"
+        android:layout_gravity="bottom|end" />
+
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
         android:layout_width="wrap_content"
@@ -121,7 +133,8 @@
         android:layout_marginEnd="16dp"
         android:tint="@android:color/white"
         android:layout_gravity="bottom|end"
-        app:layout_behavior=".FloatingActionMenuBehavior">
+        app:layout_behavior=".FloatingActionMenuBehavior"
+        android:visibility="gone">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/shots"
