@@ -22,4 +22,6 @@
         <item>@color/indicator_2</item>
         <item>@color/indicator_3</item>
     </array>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

@@ -1,11 +1,13 @@
 package com.example.macmini.baculator;
 
+import android.animation.Animator;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -25,13 +27,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.macmini.baculator.PersonFragments.PersonAdapter;
 import com.example.macmini.baculator.PersonFragments.PersonSingleton;
 import com.github.clans.fab.FloatingActionButton;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int WEIGHT = 1;
     public static final int TIME = 2;
     public static final int DONE = 3;
+    public static final int WEIGHT_SPINNGER = 4;
 
     // --> Floating Action Menu/Button <-- //
     @BindView(R.id.menu) FloatingActionMenu mMenu;
@@ -91,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case TIME:
                 fab_next.setVisibility(View.VISIBLE);
+                mCard.setVisibility(View.GONE);
                 mMenu.setVisibility(View.GONE);
                 TextInputEditText time = (TextInputEditText) view.findViewById(R.id.time_input);
                 time.requestFocus();
@@ -100,8 +106,11 @@ public class MainActivity extends AppCompatActivity {
             case DONE:
                 fab_next.setVisibility(View.GONE);
                 mMenu.setVisibility(View.VISIBLE);
-                mMenu.startAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
-                mMenu.open(true);
+                addFab(Techniques.BounceInUp, mMenu);
+                if (mAdapter.getItemCount() > 0) {
+                    mCard.setVisibility(View.VISIBLE);
+                    YoYo.with(Techniques.SlideInUp).playOn(mCard);
+                }
                 // DONE WEIGHT //
                 TextView done_weight = (TextView) view.findViewById(R.id.done_weight);
                 done_weight.setText(PersonSingleton.getInstance().getmWeight());
@@ -128,12 +137,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.main_collapsing) CollapsingToolbarLayout mCollapse;
     @BindView(R.id.app_bar_layout) AppBarLayout mAppBarLayout;
-
-//    @OnClick({R.id.app_bar_layout, R.id.main_collapsing, R.id.toolbar})
-//    public void hideKeyboard(View view) {
-//        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//    }
 
     @OnClick(R.id.calculate)
     public void calculate(Button mCalculate) {
@@ -180,17 +183,15 @@ public class MainActivity extends AppCompatActivity {
         drinkList.add(drink);
         if (mCard.getVisibility() != View.VISIBLE) {
             mCard.setVisibility(View.VISIBLE);
-            mCard.startAnimation(AnimationUtils.loadAnimation(this, R.anim.show_from_bottom));
+            YoYo.with(Techniques.SlideInUp).playOn(mCard);
         }
         mMenu.close(true);
     }
 
-
     private ArrayList<Drinks> drinkList = new ArrayList<>();
-    private DrinkAdapter mAdapter;
+    public static DrinkAdapter mAdapter;
 
     static final String DRINK_LIST = "drinkList";
-
 
     private FragmentPagerAdapter adapterViewPager;
 
@@ -219,6 +220,12 @@ public class MainActivity extends AppCompatActivity {
         view_pager.setClipToPadding(false);
         view_pager.setPageMargin(24);
         indicator.setViewPager(view_pager);
+
+        SharedPreferences prefs = this.getSharedPreferences("person_info", Context.MODE_PRIVATE);
+        PersonSingleton.getInstance().setmSex(prefs.getString(Integer.toString(GENDER), null));
+        PersonSingleton.getInstance().setmWeight(prefs.getString(Integer.toString(WEIGHT), null));
+        PersonSingleton.getInstance().setmWeightUnit(prefs.getString(Integer.toString(WEIGHT_SPINNGER), null));
+        PersonSingleton.getInstance().setmTime(prefs.getString(Integer.toString(TIME), null));
 
 
 //        // Checks for AppBar close/open event
@@ -267,8 +274,10 @@ public class MainActivity extends AppCompatActivity {
                            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                        } catch(Exception e) {
                            final Snackbar errorSnack = Snackbar
-                                   .make(recyclerView, "DELETING TOO FAST!!!", Snackbar.LENGTH_SHORT);
+                                   .make(recyclerView, "DELETING TOO FAST!! RESETTING!", Snackbar.LENGTH_SHORT);
                            errorSnack.show();
+                           drinkList.clear();
+                           mAdapter.notifyDataSetChanged();
                        }
                    }
                     @Override
@@ -335,7 +344,33 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }));
+
+
     }
+//    public void doYoyo(final Techniques techniques,final View view)
+//    {
+//        YoYo.with(techniques).duration(2000).interpolate(new LinearInterpolator()).withListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                doYoyo(techniques, view);
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        }).playOn(view);
+//    }
 
     @Override
     public void onResume(){
@@ -366,6 +401,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 
     private String calculateBAC() throws Exception {
@@ -434,7 +470,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {  }
 
+
+
         }
 
+    public void addFab(final Techniques technique, final View view) {
+        YoYo.with(technique).interpolate(new LinearInterpolator()).withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {  }
+
+            @Override
+            public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                mMenu.open(true);
+            }
+
+            @Override
+            public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {  }
+            @Override
+            public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {  }
+        }).playOn(view);
+    }
 
 }

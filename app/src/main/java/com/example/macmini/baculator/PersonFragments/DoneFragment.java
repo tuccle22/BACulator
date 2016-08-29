@@ -1,5 +1,8 @@
 package com.example.macmini.baculator.PersonFragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.macmini.baculator.AgreeActivity;
 import com.example.macmini.baculator.DrinkAdapter;
 import com.example.macmini.baculator.Drinks;
 import com.example.macmini.baculator.MainActivity;
 import com.example.macmini.baculator.R;
+import com.example.macmini.baculator.SplashActivity;
 
 import java.util.Objects;
 
@@ -31,13 +36,21 @@ public class DoneFragment extends Fragment {
 
     private Unbinder unbinder;
     private ViewPager view_pager;
-    private CircleIndicator circleIndicator;
     @BindView(R.id.done_card) CardView done_card;
 
     @OnClick(R.id.reset)
     public void onResetClick(View view) {
         DrinkAdapter.drinkList.clear();
+        MainActivity.mAdapter.notifyDataSetChanged();
+
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("something", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(SplashActivity.AGREEMENT, false);
+        editor.commit();
         view_pager.setCurrentItem(0);
+        Intent intent = new Intent(getContext(), AgreeActivity.class);
+        startActivity(intent);
     }
 
     @OnClick({R.id.done_sex, R.id.done_weight, R.id.done_weight_measure, R.id.done_time})
@@ -75,7 +88,6 @@ public class DoneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_done, container, false);
         view_pager = (ViewPager) getActivity().findViewById(R.id.view_pager);
-        circleIndicator = (CircleIndicator) getActivity().findViewById(R.id.indicator);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

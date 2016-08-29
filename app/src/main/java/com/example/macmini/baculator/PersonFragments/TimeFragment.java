@@ -1,12 +1,15 @@
 package com.example.macmini.baculator.PersonFragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.macmini.baculator.R;
 
 import butterknife.BindView;
@@ -18,9 +21,14 @@ public class TimeFragment extends Fragment {
 
     private Unbinder unbinder;
 
+    @BindView(R.id.time_input) TextInputEditText time_input;
+
     @OnTextChanged(R.id.time_input)
     public void onTextChanged(CharSequence text) {
         PersonSingleton.getInstance().setmTime(text.toString());
+        View view = time_input.getRootView();
+        FloatingActionButton fab_next = (FloatingActionButton) view.findViewById(R.id.fab_next);
+        YoYo.with(Techniques.Shake).playOn(fab_next);
     }
 
     // newInstance constructor for creating fragment with arguments

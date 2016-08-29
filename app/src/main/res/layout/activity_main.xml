@@ -6,15 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackGround"
     android:clickable="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="256dp"
-        app:elevation="1dp"
-        android:layout_marginBottom="48dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true">
 
@@ -48,50 +45,59 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:id="@+id/recycler_container"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:foreground="?android:attr/selectableItemBackground"
         app:behavior_overlapTop="82dp">
 
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/view_pager">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/view_pager"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp" />
-
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/indicator"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="bottom"
-                app:ci_drawable="@drawable/blue_circle"
-                app:ci_drawable_unselected="@drawable/blue_circle"/>
-
-        </FrameLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <LinearLayout
+            android:id="@+id/recycler_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:paddingBottom="@dimen/calculate_card"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:behavior_overlapTop="250dp" />
+            android:orientation="vertical"
+            >
 
-    </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_pager">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_pager"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp" />
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="bottom"
+                    app:ci_drawable="@drawable/blue_circle"
+                    app:ci_drawable_unselected="@drawable/blue_circle"/>
+
+            </FrameLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:paddingBottom="@dimen/calculate_card"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:behavior_overlapTop="250dp" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@mipmap/ic_launcher_blue"-->
+    <!--app:layout_anchor="@id/recycler_container"-->
+    <!--app:layout_anchorGravity="center|top" />-->
 
     <android.support.v7.widget.CardView
         android:id="@+id/card"

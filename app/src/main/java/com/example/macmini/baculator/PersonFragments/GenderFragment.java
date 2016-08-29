@@ -1,12 +1,15 @@
 package com.example.macmini.baculator.PersonFragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.macmini.baculator.R;
 
 import butterknife.ButterKnife;
@@ -20,6 +23,10 @@ public class GenderFragment extends Fragment {
     @OnClick({R.id.radio_male, R.id.radio_female})
     public void onRadioButtonClicked(RadioButton radioButton) {
         boolean checked = radioButton.isChecked();
+        YoYo.with(Techniques.Pulse).duration(250).playOn(radioButton);
+        View view = radioButton.getRootView();
+        FloatingActionButton fab_next = (FloatingActionButton) view.findViewById(R.id.fab_next);
+        YoYo.with(Techniques.Shake).playOn(fab_next);
         switch (radioButton.getId()) {
             case R.id.radio_male:
                 if (checked) {
