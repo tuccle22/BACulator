@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp">
+<LinearLayout
     android:id="@+id/row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -81,13 +85,4 @@
 
 </LinearLayout>
 
-<!--<TextView-->
-    <!--android:id="@+id/removed_row"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:textColor="@color/title"-->
-    <!--android:text="Type of Drink Removed"-->
-    <!--android:textAppearance="?android:attr/textAppearanceListItem"-->
-    <!--android:gravity="center"-->
-    <!--android:visibility="gone"-->
-    <!--android:layout_weight="1" />-->
+</android.support.v7.widget.CardView>

@@ -1,6 +1,5 @@
 package com.example.macmini.baculator;
 
-import android.animation.Animator;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.Service;
@@ -82,11 +81,14 @@ public class MainActivity extends AppCompatActivity {
         View view = view_pager.getRootView();
         switch (position) {
             case GENDER:
+                mAppBarLayout.setExpanded(true, true);
+                mCard.setVisibility(View.GONE);
                 fab_next.setVisibility(View.VISIBLE);
                 mMenu.setVisibility(View.GONE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 break;
             case WEIGHT:
+                mCard.setVisibility(View.GONE);
                 fab_next.setVisibility(View.VISIBLE);
                 mMenu.setVisibility(View.GONE);
                 TextInputEditText weight = (TextInputEditText) view.findViewById(R.id.weight_input);
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 imm.showSoftInput(weight, InputMethodManager.SHOW_IMPLICIT);
                 break;
             case TIME:
+                mCard.setVisibility(View.GONE);
                 fab_next.setVisibility(View.VISIBLE);
                 mCard.setVisibility(View.GONE);
                 mMenu.setVisibility(View.GONE);
@@ -104,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                 imm.showSoftInput(time, InputMethodManager.SHOW_IMPLICIT);
                 break;
             case DONE:
+                //TODO figure out if possible to attach done to toolbar.
+                mAppBarLayout.setExpanded(false, true);
                 fab_next.setVisibility(View.GONE);
                 mMenu.setVisibility(View.VISIBLE);
                 addFab(Techniques.BounceInUp, mMenu);
@@ -193,8 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
     static final String DRINK_LIST = "drinkList";
 
-    private FragmentPagerAdapter adapterViewPager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-
         // --> RecyclerView Stuff Here <-- //
         mAdapter = new DrinkAdapter(drinkList);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -214,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         // --> Person Information ViewPager <-- //
-        adapterViewPager = new PersonAdapter(getSupportFragmentManager());
+        FragmentPagerAdapter adapterViewPager = new PersonAdapter(getSupportFragmentManager());
         view_pager.setAdapter(adapterViewPager);
         view_pager.setOffscreenPageLimit(3);
         view_pager.setClipToPadding(false);
@@ -226,8 +228,7 @@ public class MainActivity extends AppCompatActivity {
         PersonSingleton.getInstance().setmWeight(prefs.getString(Integer.toString(WEIGHT), null));
         PersonSingleton.getInstance().setmWeightUnit(prefs.getString(Integer.toString(WEIGHT_SPINNGER), null));
         PersonSingleton.getInstance().setmTime(prefs.getString(Integer.toString(TIME), null));
-
-
+        
 //        // Checks for AppBar close/open event
 //        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 //            @Override

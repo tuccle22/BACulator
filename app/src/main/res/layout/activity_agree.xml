@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="@string/terms_text" />
+            android:text="@string/terms_text"
+            android:textAppearance="@android:style/TextAppearance.Material.Body2"/>
     </ScrollView>
 
     <Button

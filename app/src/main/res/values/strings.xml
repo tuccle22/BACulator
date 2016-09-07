@@ -17,7 +17,7 @@
     <string name="weight">What is your weight?</string>
     <string name="weight_hint">Enter Weight</string>
     <string name="time">Hours elapsed?</string>
-    <string name="time_hint">Time Since First Drink (hrs)</string>
+    <string name="time_hint">Hours Elapsed Since First Drink</string>
     <string name="done">Add Alcohol and Calculate</string>
     <string name="done_text">Pull up to begin</string>
 
@@ -66,12 +66,12 @@
 
     <string name="terms_title">Terms &amp; Agreement</string>
     <string name="terms_button">I Agree</string>
-    <string name="terms_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et vulputate sapien. Ut a felis eu purus pulvinar sollicitudin. Nullam faucibus leo ut diam rutrum lacinia. Nullam in est et lorem ultricies suscipit. Etiam pharetra diam sollicitudin dui fringilla, vitae convallis magna finibus. Sed vitae urna tortor. Aliquam posuere purus at leo placerat dignissim. Pellentesque id tincidunt tortor, nec fermentum ex. Aliquam pharetra aliquam diam, non maximus sem iaculis ultricies. Suspendisse potenti. Nam at ultricies urna, laoreet placerat metus. Ut eu tempus urna, ac tristique ligula. Curabitur tincidunt, felis a placerat dictum, orci sem ullamcorper est, sit amet blandit enim diam congue nunc. Nulla posuere mi a erat vulputate, id volutpat purus consectetur.
-
-Quisque commodo massa sed sem gravida, ut accumsan enim fermentum. Aenean mollis dapibus ex, at viverra mauris accumsan ut. Duis facilisis diam quis neque maximus, eu rhoncus augue vehicula. Proin ac ante faucibus, iaculis leo ac, pretium justo. In vel sem et eros facilisis rhoncus a eget quam. Vestibulum id finibus felis, non porta magna. Cras a lectus felis. In in neque quis risus pharetra commodo in non nibh. Phasellus volutpat auctor velit a vulputate. Nam non felis nisi. Proin volutpat, libero quis porta ornare, nisl sapien convallis nunc, at ultrices dolor dui vestibulum tortor. Mauris eget venenatis elit. Aliquam ut ullamcorper risus.
-
-In hac habitasse platea dictumst. Suspendisse eu dui vel tortor ultricies cursus ac non velit. Fusce vulputate risus ac maximus congue. Aliquam scelerisque, dolor sed suscipit pharetra, risus justo suscipit orci, vitae fermentum est libero id leo. Nam ullamcorper justo id maximus condimentum. Integer viverra blandit dui vel mollis. Nunc ac nulla in ex egestas commodo. Morbi varius mi id est molestie laoreet. Etiam euismod velit nec velit elementum, et viverra arcu tempor.
-
-Mauris vehicula ex ipsum, id pulvinar justo bibendum eget. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus eget metus in orci posuere viverra nec ac risus. Etiam lacinia ante nec semper hendrerit. Integer ut arcu molestie, maximus dolor quis, laoreet leo. Suspendisse ultrices faucibus neque a pretium. Etiam nec justo ac elit blandit feugiat.</string>
+    <string name="terms_text">
+        \n\tThe BACulator uses the Widmark formula for calculating your blood alcohol content (BAC), however,
+        there are many more factors that necessitate a truly accurate BAC.  The accuracy of this calcuator
+        is certainly suspect.  And now you know.\n\n
+        \t1. I understand that this app is potentially innacurate and
+             therefore will not use it to guide my drinking in any way.
+    </string>
 
 </resources>

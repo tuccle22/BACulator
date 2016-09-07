@@ -43,14 +43,10 @@ public class DoneFragment extends Fragment {
         DrinkAdapter.drinkList.clear();
         MainActivity.mAdapter.notifyDataSetChanged();
 
-
-        SharedPreferences prefs = getActivity().getSharedPreferences("something", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(SplashActivity.AGREEMENT, false);
-        editor.commit();
         view_pager.setCurrentItem(0);
         Intent intent = new Intent(getContext(), AgreeActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     @OnClick({R.id.done_sex, R.id.done_weight, R.id.done_weight_measure, R.id.done_time})

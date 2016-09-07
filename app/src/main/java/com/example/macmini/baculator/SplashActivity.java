@@ -24,12 +24,12 @@ public class SplashActivity extends AppCompatActivity {
         HASAGREED = prefs.getBoolean(AGREEMENT, HASAGREED);
 
         if (HASAGREED) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
             finish();
         } else {
-            Intent intent = new Intent(this, AgreeActivity.class);
-            startActivity(intent);
+            Intent i = new Intent(this, AgreeActivity.class);
+            startActivity(i);
             finish();
         }
 
