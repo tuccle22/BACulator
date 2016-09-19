@@ -34,7 +34,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
     }
 
     public DrinkAdapter(ArrayList<Drinks> drinkList) {
-        this.drinkList = drinkList;
+        DrinkAdapter.drinkList = drinkList;
     }
 
     @Override
@@ -59,6 +59,5 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkAdapter.MyViewHolder
     public int getItemCount() {
         return drinkList.size();
     }
-
 
 }

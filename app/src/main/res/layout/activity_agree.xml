@@ -20,6 +20,14 @@
             android:text="@string/terms_text"
             android:textAppearance="@android:style/TextAppearance.Material.Body2"/>
     </ScrollView>
+    <TextView
+        android:id="@+id/understand_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/terms_understand"
+        android:textAppearance="@android:style/TextAppearance.Material.Body2"
+        android:layout_above="@+id/agree_button"/>
 
     <Button
         android:id="@+id/agree_button"

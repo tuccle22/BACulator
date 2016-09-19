@@ -3,14 +3,11 @@
 
     <item
         android:drawable="@color/colorBackGround"/>
-    <item
-        android:drawable="@drawable/beer"
-        android:height="256dp"/>
 
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_launcher_splash" />
+            android:src="@drawable/ic_launcher_web" />
     </item>
 
 </layer-list>

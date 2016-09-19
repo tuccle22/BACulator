@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,7 +21,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.TypedValue;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,6 +33,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,11 +72,51 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.indicator) CircleIndicator indicator;
     @BindView(R.id.view_pager) ViewPager view_pager;
 
+    @BindView(R.id.clear) Button clear;
+    @BindView(R.id.container) CoordinatorLayout recyclerContainer;
+
     @BindView(R.id.fab_next) android.support.design.widget.FloatingActionButton fab_next;
 
     @OnClick(R.id.fab_next)
     public void onNextClick (android.support.design.widget.FloatingActionButton fab) {
-        view_pager.setCurrentItem(view_pager.getCurrentItem() + 1 );
+        if (view_pager.getCurrentItem() != 2) {
+            fabNext(Techniques.SlideOutDown, fab, 150);
+        } else {
+            fabNext(Techniques.RollOut, fab, 250);
+        }
+    }
+
+    @OnClick(R.id.clear)
+    public void clearClick (final Button clearButton) {
+
+        if (drinkList.size() > 0) {
+            final View viewItem = recyclerView.getLayoutManager().findViewByPosition(DrinkAdapter.drinkList.size() - 1);
+            YoYo.with(Techniques.SlideOutLeft).duration(150).interpolate(new LinearInterpolator()).withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {  }
+
+                @Override
+                public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                    clearClick(clearButton);
+                }
+
+                @Override
+                public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {  }
+
+                @Override
+                public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {  }
+            }).playOn(viewItem);
+            try {
+                drinkList.remove(DrinkAdapter.drinkList.size() - 1);
+            } catch (Exception e) {
+                Toast.makeText(this, "Whoops! This app is drunk.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            mAdapter.notifyDataSetChanged();
+            recyclerView.removeAllViews();
+            YoYo.with(Techniques.SlideOutLeft).playOn(clearButton);
+            clearButton.setVisibility(View.GONE);
+        }
     }
 
     @OnPageChange(R.id.view_pager)
@@ -89,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case WEIGHT:
                 mCard.setVisibility(View.GONE);
+                YoYo.with(Techniques.SlideInUp).duration(150).playOn(fab_next);
                 fab_next.setVisibility(View.VISIBLE);
                 mMenu.setVisibility(View.GONE);
                 TextInputEditText weight = (TextInputEditText) view.findViewById(R.id.weight_input);
@@ -98,8 +143,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case TIME:
                 mCard.setVisibility(View.GONE);
+                mAppBarLayout.setExpanded(true, true);
+                YoYo.with(Techniques.SlideInUp).duration(150).playOn(fab_next);
                 fab_next.setVisibility(View.VISIBLE);
                 mCard.setVisibility(View.GONE);
+                mMenu.close(true);
                 mMenu.setVisibility(View.GONE);
                 TextInputEditText time = (TextInputEditText) view.findViewById(R.id.time_input);
                 time.requestFocus();
@@ -108,13 +156,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case DONE:
                 //TODO figure out if possible to attach done to toolbar.
-                mAppBarLayout.setExpanded(false, true);
                 fab_next.setVisibility(View.GONE);
                 mMenu.setVisibility(View.VISIBLE);
-                addFab(Techniques.BounceInUp, mMenu);
+                addFab(Techniques.RollIn, mMenu);
                 if (mAdapter.getItemCount() > 0) {
                     mCard.setVisibility(View.VISIBLE);
                     YoYo.with(Techniques.SlideInUp).playOn(mCard);
+                    YoYo.with(Techniques.FadeInDown).playOn(clear);
                 }
                 // DONE WEIGHT //
                 TextView done_weight = (TextView) view.findViewById(R.id.done_weight);
@@ -183,13 +231,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         Drinks drink = new Drinks(getResources().getDrawable(mImg, getTheme()),
-                1, mOz, mDesc, mAlcContent, View.GONE);
+                1, mOz, mDesc, mAlcContent);
         mAdapter.notifyItemInserted(mAdapter.getItemCount());
         drinkList.add(drink);
         if (mCard.getVisibility() != View.VISIBLE) {
             mCard.setVisibility(View.VISIBLE);
             YoYo.with(Techniques.SlideInUp).playOn(mCard);
         }
+        clear.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.FadeInDown).playOn(clear);
         mMenu.close(true);
     }
 
@@ -228,22 +278,6 @@ public class MainActivity extends AppCompatActivity {
         PersonSingleton.getInstance().setmWeight(prefs.getString(Integer.toString(WEIGHT), null));
         PersonSingleton.getInstance().setmWeightUnit(prefs.getString(Integer.toString(WEIGHT_SPINNGER), null));
         PersonSingleton.getInstance().setmTime(prefs.getString(Integer.toString(TIME), null));
-        
-//        // Checks for AppBar close/open event
-//        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-//                offset = Math.abs(offset); //makes positive offset values - easier to work with
-//                if (offset <= appBarLayout.getTotalScrollRange()/2) {
-////                    mMenu.hideMenu(true);
-//                    mCard.setVisibility(View.GONE);
-//                }
-//                else if (offset > appBarLayout.getTotalScrollRange()/2) {
-////                    mMenu.showMenu(true);
-//                    mCard.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
 
         // --> Swipe to Dismiss Drink Items <-- //
         ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
@@ -255,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                drinkList.get(viewHolder.getAdapterPosition()).setmVisibility(View.VISIBLE);
                 final Drinks removedDrink = drinkList.get(viewHolder.getAdapterPosition());
                 final Snackbar snackbar = Snackbar
                         .make(recyclerView, "DRINK REMOVED", Snackbar.LENGTH_LONG)
@@ -263,7 +296,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 drinkList.add(viewHolder.getAdapterPosition(), removedDrink);
-                                drinkList.get(viewHolder.getAdapterPosition()).setmVisibility(View.GONE);
                                 mAdapter.notifyItemInserted(viewHolder.getAdapterPosition());
                             }
                         });
@@ -273,12 +305,11 @@ public class MainActivity extends AppCompatActivity {
                        try {
                            drinkList.remove(viewHolder.getAdapterPosition());
                            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                           YoYo.with(Techniques.FadeInUp).duration(200).playOn(clear);
                        } catch(Exception e) {
                            final Snackbar errorSnack = Snackbar
                                    .make(recyclerView, "DELETING TOO FAST!! RESETTING!", Snackbar.LENGTH_SHORT);
                            errorSnack.show();
-                           drinkList.clear();
-                           mAdapter.notifyDataSetChanged();
                        }
                    }
                     @Override
@@ -296,10 +327,29 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
                 Drinks drinks = drinkList.get(position);
                 final int pos = position;
-
                 final Dialog dialog = new Dialog(MainActivity.this);
+
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                Button button = new Button(MainActivity.this);
+                button.setText(getText(R.string.done));
+                button.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                button.setTextColor(getResources().getColor(android.R.color.white));
+                button.setGravity(Gravity.END);
+                lp.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics());
+                lp.setMarginEnd((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+
                 dialog.setContentView(R.layout.list_item);
-                dialog.setTitle(drinks.getmDrink());
+                dialog.addContentView(button, lp);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
                 try {
                     final ImageView img = (ImageView) dialog.findViewById(R.id.ic_view);
@@ -329,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
                                 drinks.setmOz(Double.parseDouble(oz.getText().toString()));
                                 mAdapter.notifyDataSetChanged();
                             } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Not a valid value, you are drunk.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -345,33 +395,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }));
-
-
     }
-//    public void doYoyo(final Techniques techniques,final View view)
-//    {
-//        YoYo.with(techniques).duration(2000).interpolate(new LinearInterpolator()).withListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                doYoyo(techniques, view);
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        }).playOn(view);
-//    }
 
     @Override
     public void onResume(){
@@ -432,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
         return String.valueOf((double)Math.round(bac * 100d) / 100d);
     }
 
-    public interface ClickListener {
+    private interface ClickListener {
         void onClick(View view, int position);
         void onLongClick(View view, int position);
     }
@@ -475,8 +499,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-    public void addFab(final Techniques technique, final View view) {
-        YoYo.with(technique).interpolate(new LinearInterpolator()).withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+    private void addFab(final Techniques technique, final View view) {
+        mAppBarLayout.setExpanded(false, true);
+        YoYo.with(technique).duration(250).interpolate(new LinearInterpolator()).withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {  }
 
@@ -490,6 +515,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {  }
         }).playOn(view);
+    }
+
+    private void fabNext(final Techniques technique, android.support.design.widget.FloatingActionButton fab, int duration) {
+        YoYo.with(technique).duration(duration).interpolate(new LinearInterpolator()).withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
+                view_pager.setCurrentItem(view_pager.getCurrentItem() + 1);
+            }
+
+            @Override
+            public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
+            }
+        }).playOn(fab);
     }
 
 }

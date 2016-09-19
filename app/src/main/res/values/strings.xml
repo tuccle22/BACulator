@@ -18,8 +18,9 @@
     <string name="weight_hint">Enter Weight</string>
     <string name="time">Hours elapsed?</string>
     <string name="time_hint">Hours Elapsed Since First Drink</string>
-    <string name="done">Add Alcohol and Calculate</string>
-    <string name="done_text">Pull up to begin</string>
+
+    <string name="done">DONE</string>
+    <string name="clear">CLEAR ALL</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>
@@ -27,12 +28,6 @@
     <string-array name="unit_array">
         <item>pounds</item>
         <item>kilograms</item>
-    </string-array>
-
-    <string-array name="gender_array">
-        <item> </item>
-        <item>Male</item>
-        <item>Female</item>
     </string-array>
 
     <string name="reset">Reset</string>
@@ -69,9 +64,11 @@
     <string name="terms_text">
         \n\tThe BACulator uses the Widmark formula for calculating your blood alcohol content (BAC), however,
         there are many more factors that necessitate a truly accurate BAC.  The accuracy of this calcuator
-        is certainly suspect.  And now you know.\n\n
-        \t1. I understand that this app is potentially innacurate and
-             therefore will not use it to guide my drinking in any way.
+        is certainly suspect.  And now you know.
+    </string>
+    <string name="terms_understand">
+        I understand that this app is potentially innacurate and
+        therefore I will not use it to guide my drinking in any way.
     </string>
 
 </resources>
