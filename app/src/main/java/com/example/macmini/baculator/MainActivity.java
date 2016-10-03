@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,13 +74,14 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.view_pager) ViewPager view_pager;
 
     @BindView(R.id.clear) Button clear;
-    @BindView(R.id.container) CoordinatorLayout recyclerContainer;
+    @BindView(R.id.row_container) LinearLayout linear_layout;
+
 
     @BindView(R.id.fab_next) android.support.design.widget.FloatingActionButton fab_next;
 
     @OnClick(R.id.fab_next)
     public void onNextClick (android.support.design.widget.FloatingActionButton fab) {
-        if (view_pager.getCurrentItem() != 2) {
+        if (view_pager.getCurrentItem() != TIME) {
             fabNext(Techniques.SlideOutDown, fab, 150);
         } else {
             fabNext(Techniques.RollOut, fab, 250);
@@ -306,6 +308,10 @@ public class MainActivity extends AppCompatActivity {
                            drinkList.remove(viewHolder.getAdapterPosition());
                            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                            YoYo.with(Techniques.FadeInUp).duration(200).playOn(clear);
+                           if (drinkList.isEmpty()) {
+                               YoYo.with(Techniques.FadeOut).playOn(clear);
+                               clear.setVisibility(View.INVISIBLE);
+                           }
                        } catch(Exception e) {
                            final Snackbar errorSnack = Snackbar
                                    .make(recyclerView, "DELETING TOO FAST!! RESETTING!", Snackbar.LENGTH_SHORT);

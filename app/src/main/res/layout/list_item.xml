@@ -25,7 +25,7 @@
             android:id="@+id/ic_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:tint="#55ff0000"
+            android:tint="@color/colorAccent"
             android:src="@drawable/ic_beer_fab"
             android:layout_weight=".5"
             android:padding="8dp"/>
